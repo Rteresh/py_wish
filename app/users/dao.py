@@ -61,14 +61,14 @@ async def get_user_by_id(id: int):
         return result.scalars().one_or_none()
 
 
-async def create_wish(title: str, description: str, user_id: int):
+async def create_wish(title: str, user_id: int):
     async with async_session_maker() as session:
-        query = insert(Wish).values(title=title, description=description, user_id=user_id)
-        await session.execute(query)
+        query = insert(Wish).values(title=title, user_id=user_id)
+        result = await session.execute(query)
         await session.commit()
 
 
-async def get_my_pairs(user_id: int):
+async def get_my_pair(user_id: int):
     async with async_session_maker() as session:
         user = await get_user_by_id(user_id)
         # Выбираем пользователя по его идентификатору
@@ -77,7 +77,7 @@ async def get_my_pairs(user_id: int):
         )
         # Выполняем запрос и возвращаем результат
         result = await session.execute(query)
-        return result.scalar_one()
+        return result.scalars().one_or_none()
 
 
 async def get_wishes_by_user_id(user_id: int):
@@ -97,13 +97,17 @@ async def get_wishes_no_fulfilled_by_user_id(user_id: int):
 
 
 async def get_my_partner(user_id: int):
-    pair = await get_my_pairs(user_id)
+    pair = await get_my_pair(user_id)
+    if not pair:
+        return None
     partner_id = pair.user2_id if pair.user1_id == user_id else pair.user1_id
     return await get_user_by_id(partner_id)
 
 
 async def get_wishes_my_partner(user_id: int):
     partner = await get_my_partner(user_id)
+    if not partner:
+        return None
     wishes = await get_wishes_no_fulfilled_by_user_id(partner.id)
     rand = random.randrange(len(wishes))
     return wishes[rand]
@@ -118,6 +122,9 @@ async def get_random_time():
 
 async def add_active_wishes(user_id: int):
     async with async_session_maker() as session:
+        partner = await get_my_partner(user_id)
+        if not partner:
+            return None
         active_wish = await get_my_active_wish(user_id)
         if not active_wish:
             wish = await get_wishes_my_partner(user_id)
@@ -127,9 +134,9 @@ async def add_active_wishes(user_id: int):
                                               expired_at=random_time)
             await session.execute(query)
             await session.commit()
-            print('well done')
+            return wish
         else:
-            print(f'you has active wish{active_wish}')
+            return active_wish
 
 
 async def get_active_wish_by_executor_id(executor_id: int):

@@ -9,6 +9,7 @@ from aiogram.enums.dice_emoji import DiceEmoji
 from app.config import settings
 from app.users.user_router import user_router
 from app.base.bot_router import base_router
+from app.wishes.wish_routers import wish_router
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,6 +19,7 @@ dp = Dispatcher()
 main_router = Router()
 main_router.include_router(user_router)
 main_router.include_router(base_router)
+main_router.include_router(wish_router)
 dp.include_router(main_router)
 
 

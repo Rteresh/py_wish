@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, TIMESTAMP, BigInteger
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -12,7 +12,7 @@ class Wish(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, nullable=False)
     description = Column(String, index=True, nullable=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(BigInteger, ForeignKey('users.id'))
     # Отношение "многие к одному" с моделью User, представляющее пользователя, который создал желание
     user = relationship("User", back_populates="wishes", cascade="all, delete")
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -25,9 +25,9 @@ class ActiveWish(Base):
     __tablename__ = 'active_wishes'
 
     id = Column(Integer, primary_key=True, index=True)
-    executor_id = Column(Integer, ForeignKey('users.id'))
-    owner_id = Column(Integer, ForeignKey('users.id'))
-    wish_id = Column(Integer, ForeignKey('wishes.id'))
+    executor_id = Column(BigInteger, ForeignKey('users.id'))
+    owner_id = Column(BigInteger, ForeignKey('users.id'))
+    wish_id = Column(BigInteger, ForeignKey('wishes.id'))
     created_at = Column(DateTime, default=datetime.utcnow)
     fulfilled = Column(Boolean, default=False)
     fulfilled_at = Column(DateTime, nullable=True)
