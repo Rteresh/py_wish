@@ -37,15 +37,15 @@ class Pair(Base):
                          primaryjoin="Pair.user2_id == User.id")
 
 
-class PairRequest(Base):
-    __tablename__ = 'pair_requests'
-    id = Column(Integer, primary_key=True, index=True)
-    requester_id = Column(BigInteger, ForeignKey('users.id'), nullable=False)
-    token = Column(String, nullable=False, unique=True)
-    is_active = Column(Boolean, default=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    requester = relationship("User", backref="pair_requests", cascade="all, delete", )
-
-    def is_valid(self):
-        return self.is_active and (datetime.utcnow() - self.created_at) < timedelta(minutes=15)
+# class PairRequest(Base):
+#     __tablename__ = 'pair_requests'
+#     id = Column(Integer, primary_key=True, index=True)
+#     requester_id = Column(BigInteger, ForeignKey('users.id'), nullable=False)
+#     token = Column(String, nullable=False, unique=True)
+#     is_active = Column(Boolean, default=True, nullable=False)
+#     created_at = Column(DateTime, default=datetime.utcnow)
+#
+#     requester = relationship("User", back_populates="pair_requests", cascade="all, delete", )
+#
+#     def is_valid(self):
+#         return self.is_active and (datetime.utcnow() - self.created_at) < timedelta(minutes=15)

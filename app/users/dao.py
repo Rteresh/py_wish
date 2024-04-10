@@ -9,15 +9,7 @@ from app.users.models import User, Pair
 from app.wishes.models import Wish, ActiveWish
 from app.database import async_session_maker
 
-
-async def create_pair(user1_id: int, user2_id: int):
-    async with async_session_maker() as session:
-        user1 = await get_user_by_id(user1_id)
-        user2 = await get_user_by_id(user2_id)
-        query = insert(Pair).values(user1_id=user1.id, user2_id=user2.id)
-        await session.execute(query)
-        await session.commit()
-        print('well done')
+from app.users.user_dao import get_my_partner
 
 
 # async def create_user(email: str, password: str):
@@ -54,30 +46,11 @@ async def update_id(user_id: int, new_id: int):
         return new_id
 
 
-async def get_user_by_id(id: int):
-    async with async_session_maker() as session:
-        query = select(User).where(User.id == id)
-        result = await session.execute(query)
-        return result.scalars().one_or_none()
-
-
 async def create_wish(title: str, user_id: int):
     async with async_session_maker() as session:
         query = insert(Wish).values(title=title, user_id=user_id)
         result = await session.execute(query)
         await session.commit()
-
-
-async def get_my_pair(user_id: int):
-    async with async_session_maker() as session:
-        user = await get_user_by_id(user_id)
-        # Выбираем пользователя по его идентификатору
-        query = (
-            select(Pair).where(or_(Pair.user1 == user, Pair.user2 == user))
-        )
-        # Выполняем запрос и возвращаем результат
-        result = await session.execute(query)
-        return result.scalars().one_or_none()
 
 
 async def get_wishes_by_user_id(user_id: int):
@@ -94,14 +67,6 @@ async def get_wishes_no_fulfilled_by_user_id(user_id: int):
         result = await session.execute(query)
         wishes = result.scalars().all()
         return wishes
-
-
-async def get_my_partner(user_id: int):
-    pair = await get_my_pair(user_id)
-    if not pair:
-        return None
-    partner_id = pair.user2_id if pair.user1_id == user_id else pair.user1_id
-    return await get_user_by_id(partner_id)
 
 
 async def get_wishes_my_partner(user_id: int):
