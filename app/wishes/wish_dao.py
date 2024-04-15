@@ -24,6 +24,7 @@ class WishDao(BaseDao):
             )
             await session.execute(query)
             await session.commit()
+            print('test')
 
     @classmethod
     def get_wishes_by_user_id(cls, user: User):
