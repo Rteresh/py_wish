@@ -2,8 +2,6 @@ from aiogram import types, Router
 from aiogram.filters.command import Command
 from aiogram.types import Message
 
-from app.users.dao import create_user, get_user_by_id
-
 base_router = Router()
 
 

@@ -9,8 +9,6 @@ from app.users.models import User, Pair
 from app.wishes.models import Wish, ActiveWish
 from app.database import async_session_maker
 
-from app.users.user_dao import get_my_partner
-
 
 # async def create_user(email: str, password: str):
 #     async with async_session_maker() as session:
@@ -18,32 +16,32 @@ from app.users.user_dao import get_my_partner
 #         await session.execute(query)
 #         await session.commit()
 
-async def create_user(data):
-    async with async_session_maker() as session:
-        query = insert(User).values(
-            id=data.id,
-            username=data.username,
-            first_name=data.first_name,
-            last_name=data.last_name,
-            language=data.language_code,
-        )
-        await session.execute(query)
-        await session.commit()
+# async def create_user(data):
+#     async with async_session_maker() as session:
+#         query = insert(User).values(
+#             id=data.id,
+#             username=data.username,
+#             first_name=data.first_name,
+#             last_name=data.last_name,
+#             language=data.language_code,
+#         )
+#         await session.execute(query)
+#         await session.commit()
 
 
-async def update_email(user_id: int, new_email: str):
-    async with async_session_maker() as session:
-        query = update(User).where(User.id == user_id).values(email=new_email)
-        await session.execute(query)
-        await session.commit()
+# async def update_email(user_id: int, new_email: str):
+#     async with async_session_maker() as session:
+#         query = update(User).where(User.id == user_id).values(email=new_email)
+#         await session.execute(query)
+#         await session.commit()
 
 
-async def update_id(user_id: int, new_id: int):
-    async with async_session_maker() as session:
-        query = update(User).where(User.id == user_id).values(id=new_id)
-        await session.execute(query)
-        await session.commit()
-        return new_id
+# async def update_id(user_id: int, new_id: int):
+#     async with async_session_maker() as session:
+#         query = update(User).where(User.id == user_id).values(id=new_id)
+#         await session.execute(query)
+#         await session.commit()
+#         return new_id
 
 
 async def create_wish(title: str, user_id: int):

@@ -1,87 +1,49 @@
-import asyncio
-import random
-from datetime import timedelta, datetime
-from uuid import uuid4
+from sqlalchemy import insert, update
 
-from sqlalchemy import insert, update, select, or_, and_
-from sqlalchemy.orm import joinedload
-
-from app.users.models import User, Pair
-from app.wishes.models import Wish, ActiveWish
+from app.users.models import User
 from app.database import async_session_maker
 
-
-async def get_my_partner(user_id: int):
-    pair = await get_my_pair(user_id)
-    if not pair:
-        return None
-    partner_id = pair.user2_id if pair.user1_id == user_id else pair.user1_id
-    return await get_user_by_id(partner_id)
+from app.base.base_dao import BaseDao
 
 
-async def get_user_by_id(id: int):
-    async with async_session_maker() as session:
-        query = select(User).where(User.id == id)
-        result = await session.execute(query)
-        return result.scalars().one_or_none()
+class UserDao(BaseDao):
+    model = User
 
+    @classmethod
+    async def create_user(cls, data):
+        """
+        Метод create_user создает новую запись пользователя в базе данных.
 
-async def get_my_pair(user_id: int):
-    async with async_session_maker() as session:
-        user = await get_user_by_id(user_id)
-        # Выбираем пользователя по его идентификатору
-        query = (
-            select(Pair).where(or_(Pair.user1 == user, Pair.user2 == user))
-        )
-        # Выполняем запрос и возвращаем результат
-        result = await session.execute(query)
-        return result.scalars().one_or_none()
+        Args:
+            data: Объект, содержащий данные о пользователе.
 
+        Returns:
+            None
+        """
+        async with async_session_maker() as session:
+            query = insert(cls.model).values(
+                id=data.id,
+                username=data.username,
+                first_name=data.first_name,
+                last_name=data.last_name,
+                language=data.language_code,
+            )
+            await session.execute(query)
+            await session.commit()
 
-async def create_pair(user1_id: int, user2_id: int):
-    async with async_session_maker() as session:
-        user1 = await get_user_by_id(user1_id)
-        user2 = await get_user_by_id(user2_id)
-        query = insert(Pair).values(user1_id=user1.id, user2_id=user2.id)
-        await session.execute(query)
-        await session.commit()
-        print('well done')
+    @classmethod
+    async def update_email(cls, user: User, new_email: str):
+        """
+        Метод update_email обновляет адрес электронной почты пользователя.
 
+        Args:
+            user: Объект пользователя, для которого необходимо обновить адрес электронной почты.
+            new_email: Новый адрес электронной почты.
 
-async def create_pair_request(user_id: int):
-    async with async_session_maker() as session:
-        pair = await get_my_pair(user_id)
-        if pair:
-            return 'Ты уже создаешь в паре'
-        token = str(uuid4())
-        query = insert(PairRequest).values(requester_id=user_id, token=token)
-        await session.execute(query)
-        await session.commit()
-        return token
-
-
-async def get_pair_request(token: str):
-    async with async_session_maker() as session:
-        query = (
-            select(PairRequest)
-        )
-        result = await session.execute(query)
-        print('1')
-        return result.scalars().one_or_none()
-
-
-async def accept_pair_request(token: str):
-    existing_request = await get_pair_request(token)
-    # if existing_request and existing_request.is_valid:
-    #     print('hello')
-
-
-async def main():
-    # await accept_pair_request('123')
-    # await get_pair_request('123')
-    await get_my_partner(6)
-
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
+        Returns:
+            None
+        """
+        async with async_session_maker() as session:
+            query = update(User).where(User.id == user.id).values(email=new_email)
+            await session.execute(query)
+            await session.commit()
