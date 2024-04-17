@@ -44,92 +44,92 @@ from app.database import async_session_maker
 #         return new_id
 
 
-async def create_wish(title: str, user_id: int):
-    async with async_session_maker() as session:
-        query = insert(Wish).values(title=title, user_id=user_id)
-        result = await session.execute(query)
-        await session.commit()
+# async def create_wish(title: str, user_id: int):
+#     async with async_session_maker() as session:
+#         query = insert(Wish).values(title=title, user_id=user_id)
+#         result = await session.execute(query)
+#         await session.commit()
 
 
-async def get_wishes_by_user_id(user_id: int):
-    async with async_session_maker() as session:
-        query = select(Wish).where(Wish.user_id == user_id)
-        result = await session.execute(query)
-        wishes = result.scalars().all()
-        return wishes
+# async def get_wishes_by_user_id(user_id: int):
+#     async with async_session_maker() as session:
+#         query = select(Wish).where(Wish.user_id == user_id)
+#         result = await session.execute(query)
+#         wishes = result.scalars().all()
+#         return wishes
 
 
-async def get_wishes_no_fulfilled_by_user_id(user_id: int):
-    async with async_session_maker() as session:
-        query = select(Wish).where(and_(Wish.user_id == user_id, Wish.fulfilled.__eq__(False)))
-        result = await session.execute(query)
-        wishes = result.scalars().all()
-        return wishes
+# async def get_wishes_no_fulfilled_by_user_id(user_id: int):
+#     async with async_session_maker() as session:
+#         query = select(Wish).where(and_(Wish.user_id == user_id, Wish.fulfilled.__eq__(False)))
+#         result = await session.execute(query)
+#         wishes = result.scalars().all()
+#         return wishes
 
 
-async def get_wishes_my_partner(user_id: int):
-    partner = await get_my_partner(user_id)
-    if not partner:
-        return None
-    wishes = await get_wishes_no_fulfilled_by_user_id(partner.id)
-    rand = random.randrange(len(wishes))
-    return wishes[rand]
+# async def get_wishes_my_partner(user_id: int):
+#     partner = await get_my_partner(user_id)
+#     if not partner:
+#         return None
+#     wishes = await get_wishes_no_fulfilled_by_user_id(partner.id)
+#     rand = random.randrange(len(wishes))
+#     return wishes[rand]
+
+#
+# async def get_random_time():
+#     now = datetime.now()
+#     dt = timedelta(minutes=random.randint(1000, 5000))
+#     expired_at = now + dt
+#     return expired_at
+
+#
+# async def add_active_wishes(user_id: int):
+#     async with async_session_maker() as session:
+#         partner = await get_my_partner(user_id)
+#         if not partner:
+#             return None
+#         active_wish = await get_my_active_wish(user_id)
+#         if not active_wish:
+#             wish = await get_wishes_my_partner(user_id)
+#             owner = await get_my_partner(user_id)
+#             random_time = await get_random_time()
+#             query = insert(ActiveWish).values(executor_id=user_id, owner_id=owner.id, wish_id=wish.id,
+#                                               expired_at=random_time)
+#             await session.execute(query)
+#             await session.commit()
+#             return wish
+#         else:
+#             return active_wish
 
 
-async def get_random_time():
-    now = datetime.now()
-    dt = timedelta(minutes=random.randint(1000, 5000))
-    expired_at = now + dt
-    return expired_at
+# async def get_active_wish_by_executor_id(executor_id: int):
+#     async with async_session_maker() as session:
+#         query = select(ActiveWish).where(and_(ActiveWish.executor_id == executor_id),
+#                                          ActiveWish.fulfilled.__eq__(False))
+#         result = await session.execute(query)
+#         wish = result.scalars().one_or_none()
+#         return wish
 
 
-async def add_active_wishes(user_id: int):
-    async with async_session_maker() as session:
-        partner = await get_my_partner(user_id)
-        if not partner:
-            return None
-        active_wish = await get_my_active_wish(user_id)
-        if not active_wish:
-            wish = await get_wishes_my_partner(user_id)
-            owner = await get_my_partner(user_id)
-            random_time = await get_random_time()
-            query = insert(ActiveWish).values(executor_id=user_id, owner_id=owner.id, wish_id=wish.id,
-                                              expired_at=random_time)
-            await session.execute(query)
-            await session.commit()
-            return wish
-        else:
-            return active_wish
+# async def get_my_active_wish(user_id: int):
+#     async with async_session_maker() as session:
+#         wish = await get_active_wish_by_executor_id(user_id)
+#         query = select(Wish).where(Wish.id == wish.wish_id)
+#         result = await session.execute(query)
+#         wish = result.scalars().one_or_none()
+#         return wish.title
 
 
-async def get_active_wish_by_executor_id(executor_id: int):
-    async with async_session_maker() as session:
-        query = select(ActiveWish).where(and_(ActiveWish.executor_id == executor_id),
-                                         ActiveWish.fulfilled.__eq__(False))
-        result = await session.execute(query)
-        wish = result.scalars().one_or_none()
-        return wish
-
-
-async def get_my_active_wish(user_id: int):
-    async with async_session_maker() as session:
-        wish = await get_active_wish_by_executor_id(user_id)
-        query = select(Wish).where(Wish.id == wish.wish_id)
-        result = await session.execute(query)
-        wish = result.scalars().one_or_none()
-        return wish.title
-
-
-async def get_partner_email(pair_id: int):
-    async with async_session_maker() as session:
-        query = (
-            select(Pair)
-            .options(joinedload(Pair.user1))
-            .filter(Pair.id == pair_id)
-        )
-        result = await session.execute(query)
-        pair = result.scalar_one_or_none()
-        return pair
+# async def get_partner_email(pair_id: int):
+#     async with async_session_maker() as session:
+#         query = (
+#             select(Pair)
+#             .options(joinedload(Pair.user1))
+#             .filter(Pair.id == pair_id)
+#         )
+#         result = await session.execute(query)
+#         pair = result.scalar_one_or_none()
+#         return pair
 
 
 async def main():
@@ -152,7 +152,8 @@ async def main():
     # print(await get_wishes_my_partner(1))
     # await add_active_wishes(1)
     # print(await get_my_active_wish(1))
-    print(await get_partner_email(1))
+    # print(await get_partner_email(1))
+    pass
 
 
 if __name__ == '__main__':

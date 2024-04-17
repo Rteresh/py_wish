@@ -2,8 +2,10 @@ from aiogram import types, Router, F
 from aiogram.filters.command import Command, CommandObject
 from aiogram.types import Message
 
-from app.users.dao import create_user, get_user_by_id, get_my_pair, get_my_partner, create_wish, get_wishes_by_user_id, \
-    add_active_wishes
+from app.users.user_dao import UserDao
+from app.users.pair_dao import PairDao
+from app.wishes.wish_dao import WishDao
+from app.wishes.active_wish_dao import ActiveDao
 
 wish_router = Router()
 
@@ -12,6 +14,10 @@ wish_router = Router()
 async def add_wish(message: Message, command: CommandObject):
     # Если не переданы никакие аргументы, то
     # command.args будет None
+    user = await UserDao.find_one_or_none(id=message.from_user.id)
+    if not user:
+        # СЮДА ПРОПИСАТЬ ОШИБКУ
+        return None
     if command.args is None:
         await message.answer(
             "Ошибка: не переданы аргументы"
@@ -27,7 +33,7 @@ async def add_wish(message: Message, command: CommandObject):
             "/add_wish <message>"
         )
         return
-    await create_wish(text, message.from_user.id)
+    await WishDao.create_wish(text=text, user=user)
     await message.answer(
         f'Dобавлено новое пожелание: {text}'
     )
@@ -35,8 +41,11 @@ async def add_wish(message: Message, command: CommandObject):
 
 @wish_router.message(Command('get_all_wishes'))
 async def get_all_wishes(message: Message):
-    data = message.from_user
-    wishes = await get_wishes_by_user_id(data.id)
+    user = await UserDao.find_one_or_none(id=message.from_user.id)
+    if not user:
+        # СЮДА ПРОПИСАТЬ ОШИБКУ
+        return None
+    wishes = await WishDao.get_wishes_by_user_id(user)
     if not wishes:
         await message.answer('У вас еще нет пожеланий!')
         return
@@ -50,11 +59,15 @@ async def get_all_wishes(message: Message):
 
 @wish_router.message(Command('doit'))
 async def get_my_wishes(message: Message):
-    data = message.from_user
-    active_wish = await add_active_wishes(data.id)
+    user = await UserDao.find_one_or_none(id=message.from_user.id)
+    if not user:
+        # СЮДА ПРОПИСАТЬ ОШИБКУ
+        return None
+    active_wish = await ActiveDao.create_active_wish(user)
     if not active_wish:
         await message.answer('У вас еще нет желаний!')
         return
     await message.answer(
-        f'Ваша желание: {active_wish.wish.title}'
+        f'Ваша желание: {active_wish.title}'
+        f'Ваша желание: {active_wish.id}'
     )

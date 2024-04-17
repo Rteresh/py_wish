@@ -13,8 +13,8 @@ class PairDao(BaseDao):
 
     @classmethod
     async def get_my_pair(cls, user: User):
-        async with async_session_maker as session:
-            query = select(Pair).where(or_(Pair.user1 == user, Pair.user2 == user))
+        async with async_session_maker() as session:
+            query = select(Pair).where(or_(Pair.user1_id == user.id, Pair.user2_id == user.id))
             result = await session.execute(query)
             return result.scalar_one_or_none()
 
