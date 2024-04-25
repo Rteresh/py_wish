@@ -45,7 +45,6 @@ async def create_pair(user1_id: int, user2_id: int):
         query = insert(Pair).values(user1_id=user1.id, user2_id=user2.id)
         await session.execute(query)
         await session.commit()
-        print('well done')
 
 
 async def create_pair_request(user_id: int):
@@ -66,7 +65,6 @@ async def get_pair_request(token: str):
             select(PairRequest)
         )
         result = await session.execute(query)
-        print('1')
         return result.scalars().one_or_none()
 
 

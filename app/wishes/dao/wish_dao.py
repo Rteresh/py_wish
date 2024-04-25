@@ -1,17 +1,13 @@
-import asyncio
 import random
-from datetime import timedelta, datetime
-from uuid import uuid4
 
-from sqlalchemy import insert, update, select, or_, and_
-from sqlalchemy.orm import joinedload
+from sqlalchemy import insert, select, and_
 
-from app.users.models import User, Pair, PairRequest
-from app.wishes.models import Wish, ActiveWish
+from app.users.models import User
+from app.wishes.models import Wish
 from app.database import async_session_maker
 
 from app.base.base_dao import BaseDao
-from app.users.pair_dao import PairDao
+from app.users.dao.pair_dao import PairDao
 
 
 class WishDao(BaseDao):
@@ -25,7 +21,6 @@ class WishDao(BaseDao):
             )
             await session.execute(query)
             await session.commit()
-            print('test')
 
     @classmethod
     async def get_wishes_by_user_id(cls, user: User):

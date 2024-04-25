@@ -8,7 +8,7 @@ class BaseDao:
     model = None
 
     @classmethod
-    async def data_all(cls):
+    async def data_all(cls) -> List[dict]:
         """
         Метод data_all возвращает все записи из базы данных для модели, связанной с текущим DAO.
 
@@ -20,7 +20,7 @@ class BaseDao:
             return model.mappings().all()
 
     @classmethod
-    async def find_all(cls, **filter_by):
+    async def find_all(cls, **filter_by) -> List[dict]:
         """
         Метод find_all возвращает все записи, соответствующие заданным фильтрам.
 
@@ -36,7 +36,7 @@ class BaseDao:
             return result.mappings().all()
 
     @classmethod
-    async def find_one_or_none(cls, **filter_by):
+    async def find_one_or_none(cls, **filter_by) -> dict or None:
         """
         Метод find_one_or_none возвращает одну запись, соответствующую заданным фильтрам, или None, если ничего не найдено.
 
@@ -52,7 +52,7 @@ class BaseDao:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def find_by_id(cls, model_id: int):
+    async def find_by_id(cls, model_id: int) -> dict or None:
         """
         Метод find_by_id возвращает запись по её идентификатору.
 
@@ -68,7 +68,7 @@ class BaseDao:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def find_by_ids(cls, user_ids: List[int]):
+    async def find_by_ids(cls, user_ids: List[int]) -> List[dict]:
         """
         Метод find_by_ids возвращает записи по списку их идентификаторов.
 

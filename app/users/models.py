@@ -36,6 +36,7 @@ class Pair(Base):
     user2 = relationship("User", foreign_keys=[user2_id], backref="pair2", cascade="all, delete",
                          primaryjoin="Pair.user2_id == User.id")
 
+
 class PairRequest(Base):
     __tablename__ = 'pair_requests'
     id = Column(Integer, primary_key=True, index=True)

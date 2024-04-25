@@ -25,6 +25,7 @@ class ActiveWish(Base):
     __tablename__ = 'active_wishes'
 
     id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True, nullable=False)
     executor_id = Column(BigInteger, ForeignKey('users.id'))
     owner_id = Column(BigInteger, ForeignKey('users.id'))
     wish_id = Column(BigInteger, ForeignKey('wishes.id'))

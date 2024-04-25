@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -8,6 +10,7 @@ class Settings(BaseSettings):
     DB_PASS: str
     DB_NAME: str
     TOKEN: str
+    BOT_NAME: str
 
     @property
     def database_url(self):
@@ -21,3 +24,7 @@ class Settings(BaseSettings):
 settings = Settings()
 DATABASE_URL = settings.database_url
 
+DIR = Path(__file__).absolute().parent
+
+I18N_DOMAIN = 'bot'
+LOCALES_DIR = f'{DIR}/locales'
