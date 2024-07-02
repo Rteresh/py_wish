@@ -2,8 +2,8 @@ from aiogram import Router
 from aiogram.filters.command import Command
 from aiogram.types import Message
 
-from app.users.dao.user_dao import UserDao
-from app.users.dao.pair_dao import PairDao
+from app.dao.user.user_dao import UserDao
+from app.dao.user.pair_dao import PairDao
 
 user_router = Router()
 

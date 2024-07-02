@@ -3,12 +3,12 @@ from uuid import uuid4
 
 from sqlalchemy import insert, select, or_, and_, delete
 
-from app.base.base_dao import BaseDao
+from app.dao.base.base_dao import BaseDao
 
 from app.config import settings
 from app.database import async_session_maker
-from app.users.models import Pair, User, PairRequest
-from app.users.dao.user_dao import UserDao
+from app.models.user.models import Pair, User, PairRequest
+from app.dao.user.user_dao import UserDao
 
 
 class PairDao(BaseDao):
@@ -39,9 +39,6 @@ class PairDao(BaseDao):
     @classmethod
     async def create_pair_request(cls, user: User) -> str:
         async with async_session_maker() as session:
-            # pair = await cls.get_my_pair(user)
-            # if pair:
-            #     return None
             token = str(uuid4())
             bot_name = settings.BOT_NAME
             confirmation_link = f'https://t.me/{bot_name}?start=testp_{token}'  # ЗДЕСЬ URL
@@ -85,3 +82,17 @@ class PairDao(BaseDao):
             query = delete(PairRequest).where(PairRequest.id == pair_request.id)
             await session.execute(query)
             await session.commit()
+
+    @classmethod
+    async def delete_my_pair(cls, user: User):
+        async with async_session_maker() as session:
+            pair = await cls.get_my_pair(user)
+            if not pair:
+                return
+            query = delete(Pair).where(Pair.id == pair.id)
+            await session.execute(query)
+            await session.commit()
+
+    @classmethod
+    async def delete_timeout_pair_request(cls):
+        pass

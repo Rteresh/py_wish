@@ -26,10 +26,12 @@ class ActiveWish(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, nullable=False)
+    description = Column(String, index=True, nullable=True)
     executor_id = Column(BigInteger, ForeignKey('users.id'))
     owner_id = Column(BigInteger, ForeignKey('users.id'))
     wish_id = Column(BigInteger, ForeignKey('wishes.id'))
     created_at = Column(DateTime, default=datetime.utcnow)
+    in_confirm = Column(Boolean, default=False)
     fulfilled = Column(Boolean, default=False)
     fulfilled_at = Column(DateTime, nullable=True)
     expired_at = Column(DateTime, nullable=True)

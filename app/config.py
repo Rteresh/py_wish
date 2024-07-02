@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -28,3 +29,5 @@ DIR = Path(__file__).absolute().parent
 
 I18N_DOMAIN = 'bot'
 LOCALES_DIR = f'{DIR}/locales'
+
+MEDIA_DIR = DIR / 'all_media'

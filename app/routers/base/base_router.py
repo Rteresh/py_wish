@@ -1,9 +1,9 @@
 from aiogram import types, Router
 from aiogram.filters.command import Command, CommandObject
 
-from app.users.models import PairRequest, User
-from app.users.dao.user_dao import UserDao
-from app.users.dao.pair_dao import PairDao
+from app.models.user.models import PairRequest, User
+from app.dao.user.user_dao import UserDao
+from app.dao.user.pair_dao import PairDao
 
 base_router = Router()
 
@@ -52,6 +52,11 @@ async def confirm_pair_request(message: types.Message, pair_request: PairRequest
         await message.answer(
             'Партнер не найден'
         )
+    elif user.id == partner.id:
+        await message.answer(
+            f"Нельзя создать пару с самим собой! "
+        )
+        return
     else:
         await PairDao.confirm_pair_request(user, partner)
         await PairDao.delete_pair_request(pair_request)
@@ -65,6 +70,3 @@ async def check_pair(user: User) -> bool:
     if pair:
         return False
     return True
-
-
-

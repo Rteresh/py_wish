@@ -1,9 +1,9 @@
 from sqlalchemy import insert, update
 
-from app.users.models import User
+from app.models.user.models import User
 from app.database import async_session_maker
 
-from app.base.base_dao import BaseDao
+from app.dao.base.base_dao import BaseDao
 
 
 class UserDao(BaseDao):

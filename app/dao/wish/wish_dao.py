@@ -1,13 +1,14 @@
 import random
+from datetime import datetime
 
-from sqlalchemy import insert, select, and_
+from sqlalchemy import insert, select, and_, update
 
-from app.users.models import User
-from app.wishes.models import Wish
+from app.models.user.models import User
+from app.models.wishes.models import Wish
 from app.database import async_session_maker
 
-from app.base.base_dao import BaseDao
-from app.users.dao.pair_dao import PairDao
+from app.dao.base.base_dao import BaseDao
+from app.dao.user.pair_dao import PairDao
 
 
 class WishDao(BaseDao):
@@ -25,7 +26,7 @@ class WishDao(BaseDao):
     @classmethod
     async def get_wishes_by_user_id(cls, user: User):
         async with async_session_maker() as session:
-            query = select(cls.model).where(cls.model.user_id == user.id)
+            query = select(cls.model).where(cls.model.user_id == user.id).order_by(cls.model.id.desc())
             result = await session.execute(query)
             wishes = result.scalars().all()
             return wishes
@@ -58,3 +59,31 @@ class WishDao(BaseDao):
         wishes = await cls.get_unfulfilled_wishes_by_user_id(partner)
         rand = random.randrange(len(wishes))
         return wishes[rand]
+
+    @classmethod
+    async def confirm_wish(cls, wish: Wish):
+        async with async_session_maker() as session:
+            query = update(cls.model).where(cls.model.id == wish.id).values(
+                fulfilled=True,
+                fulfilled_at=datetime.now(),
+                description="Выполнил желание")
+            await session.execute(query)
+            await session.commit()
+
+    @classmethod
+    async def reject_wish(cls, wish: Wish):
+        async with async_session_maker() as session:
+            query = update(cls.model).where(cls.model.id == wish.id).values(
+                fulfilled=True,
+                fulfilled_at=datetime.now(),
+                description="Не выполнил желание")
+            await session.execute(query)
+            await session.commit()
+
+    @classmethod
+    async def update_wish(cls, wish: Wish, text: str):
+        async with async_session_maker() as session:
+            query = update(cls.model).where(cls.model.id == wish.id).values(
+                title=text)
+            await session.execute(query)
+            await session.commit()

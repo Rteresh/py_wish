@@ -8,8 +8,6 @@ from alembic import context
 
 from app.database import Base
 from app.config import DATABASE_URL
-from app.users.models import User, Pair
-from app.wishes.models import Wish, ActiveWish
 
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
