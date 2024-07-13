@@ -1,9 +1,10 @@
 from aiogram import Router
 from aiogram.filters.command import Command
 from aiogram.types import Message
+from aiogram.utils.i18n import gettext as _
 
-from app.dao.user.user_dao import UserDao
 from app.dao.user.pair_dao import PairDao
+from app.dao.user.user_dao import UserDao
 
 pair_router = Router()
 
@@ -13,7 +14,7 @@ async def bot_help(message: Message):
     user = await UserDao.find_one_or_none(id=message.from_user.id)
     request = await PairDao.create_pair_request(user)
     await message.answer(
-        f'Запрос создан {request}'
+        _('Запрос создан {request}').format(request=request)
     )
 
 
@@ -23,11 +24,11 @@ async def get_pair(message: Message):
     partner = await PairDao.get_my_partner(user)
     if not partner:
         await message.answer(
-            'У вас еще нет партнера!'
+            _('У вас еще нет партнера!')
         )
     else:
         await message.answer(
-            f'Ваш партнер:{partner.username}'
+            _('Ваш партнер:{partner}').format(partner=partner.username)
         )
 
 
@@ -37,10 +38,10 @@ async def reject_pair(message: Message):
     pair = await PairDao.get_my_pair(user)
     if not pair:
         await message.answer(
-            'У вас еще нет партнера!'
+            _('У вас еще нет партнера!')
         )
     else:
         await PairDao.delete_my_pair(user)
         await message.answer(
-            f'Вы больше не являетесь партнерами!'
+            _('Вы больше не являетесь партнерами!')
         )

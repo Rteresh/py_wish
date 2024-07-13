@@ -1,15 +1,13 @@
 import os
 from contextlib import suppress
-from random import randint
 from typing import Optional
 
-from aiogram import types, Router, F, Bot
+from aiogram import types, Router, F
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters.callback_data import CallbackData
 from aiogram.filters.command import Command
-from aiogram.types import InputFile
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from aiogram.types import FSInputFile
+from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 from app.config import MEDIA_DIR
 from app.text.menu.rules import get_rules
@@ -228,3 +226,105 @@ async def callbacks_num_finish_fab(callback: types.CallbackQuery):
 
     await callback.message.edit_text(f"Итого: {user_value}")
     await callback.answer()
+
+# @menu_router.message(Command("stt"))
+# async def cmd_random(message: types.Message):
+#     builder = InlineKeyboardBuilder()
+#     photo_path = MEDIA_DIR / 'image1.jpg'  # Динамическое формирование пути
+#
+#     builder.row(types.InlineKeyboardButton(
+#         text="Правила пользования 📖",
+#         callback_data="rules")
+#     )
+#     builder.row(types.InlineKeyboardButton(
+#         text="FAQ \ud83e\udde0",
+#         callback_data="FAQ")
+#     )
+#     builder.row(types.InlineKeyboardButton(
+#         text="Настройки \u2699",
+#         callback_data="settings")
+#     )
+#     await message.answer_photo(
+#         photo=FSInputFile(photo_path),
+#         caption="Нажмите на одну из кнопок, чтобы бот отправил число от 1 до 10",
+#         reply_markup=builder.as_markup()
+#     )
+#
+#
+# @menu_router.callback_query(F.data == "rules")
+# async def send_rules(callback: types.CallbackQuery):
+#     await callback.answer(
+#         text=await get_rules(),
+#         show_alert=True
+#     )
+#
+#
+# @menu_router.callback_query(F.data == "FAQ")
+# async def send_FAQ(callback: types.CallbackQuery):
+#     await callback.answer(
+#         text="Спасибо, что воспользовались ботом!",
+#         show_alert=True
+#     )
+#
+#
+# @menu_router.callback_query(F.data == "settings")
+# async def menu_settings(callback: types.CallbackQuery):
+#     await callback.message.edit_text(
+#         text="Спасибо, что воспользовались ботом!",
+#     )
+#     await callback.answer()
+#     # или просто await call.answer()
+#
+
+# ----------
+# Это вариант БЕЗ фабрики.
+
+#
+# class NumbersCallbackFactory(CallbackData, prefix="fabnum"):
+#     action: str
+#     value: Optional[int] = None
+#
+#
+# def get_keyboard_fab():
+#     builder = InlineKeyboardBuilder()
+#     builder.button(text="-2", callback_data=NumbersCallbackFactory(action="change", value=-2))
+#     builder.button(text="-1", callback_data=NumbersCallbackFactory(action="change", value=-1))
+#     builder.button(text="+1", callback_data=NumbersCallbackFactory(action="change", value=1))
+#     builder.button(text="+2", callback_data=NumbersCallbackFactory(action="change", value=2))
+#     builder.button(text="Подтвердить", callback_data=NumbersCallbackFactory(action="finish"))
+#     builder.adjust(4)
+#     return builder.as_markup()
+#
+#
+# async def update_num_text_fab(message: types.Message, new_value: int):
+#     with suppress(TelegramBadRequest):
+#         await message.edit_text(
+#             f"Укажите число: {new_value}",
+#             reply_markup=get_keyboard_fab()
+#         )
+#
+#
+# @menu_router.message(Command("numbers_fab"))
+# async def cmd_numbers_fab(message: types.Message):
+#     user_data[message.from_user.id] = 0
+#     await message.answer("Укажите число: 0", reply_markup=get_keyboard_fab())
+#
+#
+# # Нажатие на одну из кнопок: -2, -1, +1, +2
+# @menu_router.callback_query(NumbersCallbackFactory.filter(F.action == "change"))
+# async def callbacks_num_change_fab(callback: types.CallbackQuery, callback_data: NumbersCallbackFactory):
+#     # Текущее значение
+#     user_value = user_data.get(callback.from_user.id, 0)
+#
+#     user_data[callback.from_user.id] = user_value + callback_data.value
+#     await update_num_text_fab(callback.message, user_value + callback_data.value)
+#     await callback.answer()
+#
+#
+# # Нажатие на кнопку "подтвердить"
+# @menu_router.callback_query(NumbersCallbackFactory.filter(F.action == "finish"))
+# async def callbacks_num_finish_fab(callback: types.CallbackQuery):
+#     # Текущее значение
+#     user_value = user_data.get(callback.from_user.id, 0)
+#     await callback.message.edit_media(caption=f'Sasdadsadadasdads')
+#     await callback.answer()

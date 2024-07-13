@@ -4,11 +4,12 @@ from datetime import datetime
 from aiogram import Router
 from aiogram.filters.command import Command
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from aiogram.utils.i18n import gettext as _
 
 from app.dao.user.pair_dao import PairDao
 from app.dao.user.user_dao import UserDao
-from app.models.user.models import User
 from app.dao.wish.active_wish_dao import ActiveDao
+from app.models.user.models import User
 
 active_router = Router()
 
@@ -19,8 +20,11 @@ async def create_active_wish(message: Message):
     if await _check_active_wish(user):
         await get_active(user, message)
     else:
-        await ActiveDao.create_active_wish(user)
-        await get_active(user, message)
+        if await PairDao.get_my_partner(user):
+            await ActiveDao.create_active_wish(user)
+            await get_active(user, message)
+        else:
+            await message.answer('У вас еще нет партнера!')
 
 
 async def _check_active_wish(user) -> bool:
@@ -33,11 +37,11 @@ async def _check_active_wish(user) -> bool:
 async def get_active(user: User, message: Message):
     active_wish = await ActiveDao.get_active_wish_by_executor(user)
     if not active_wish:
-        await message.answer('У вас еще нет активного желания')
+        await message.answer(_('У вас еще нет активного желания'))
         return
     await message.answer(
-        f'Ваша желание: {active_wish.title}\n'
-        f'Срок на выполнение:{active_wish.expired_at}\n'
+        _('Ваша желание: {title}\n').format(title=active_wish.title),
+        _('Срок на выполнение:{expired_at}\n').format(expired_at=active_wish.expired_at)
     )
 
 
@@ -52,13 +56,14 @@ async def get_active_time(message: Message):
     user = await UserDao.find_one_or_none(id=message.from_user.id)
     active_wish = await ActiveDao.get_active_wish_by_executor(user)
     if not active_wish:
-        await message.answer('У вас еще нет активного желания')
+        await message.answer(_('У вас еще нет активного желания'))
         return
 
     days, hours, minutes = await _get_time_until_expiration(active_wish.expired_at)
     await message.answer(
-        f'Ваше желание: {active_wish.title}\n'
-        f'Вам осталось {days} дней {hours} часов {minutes} минут до истечения срока.\n'
+        _('Ваше желание: {title}\n').format(tittle=active_wish.title),
+        _('Вам осталось {days} дней {hours} часов {minutes} минут до истечения срока.\n').format(days=days, hours=hours,
+                                                                                                 minutes=minutes)
     )
 
 
@@ -77,17 +82,18 @@ async def _get_time_until_expiration(expiration_date: datetime):
 async def send_confirmation_request(message: Message):
     user = await UserDao.find_one_or_none(id=message.from_user.id)
     if not await _check_active_wish(user):
-        await message.answer('У вас еще нет активного желания')
+        await message.answer(_('У вас еще нет активного желания'))
         return
     wish = await ActiveDao.get_active_wish_by_executor(user)
     partner = await PairDao.get_my_partner(user)
     buttons = [
-        InlineKeyboardButton(text="Подтвердить", callback_data="confirm", cache_time=0),
-        InlineKeyboardButton(text="Отклонить", callback_data="reject", cache_time=0)
+        InlineKeyboardButton(text=_("Подтвердить"), callback_data="confirm", cache_time=0),
+        InlineKeyboardButton(text=_("Отклонить"), callback_data="reject", cache_time=0)
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=[buttons])
-    await message.bot.send_message(partner.id, f"Пожалуйста, подтвердите выполнение желания: {wish.title}\n"
-                                               f"Выполнил: {user.username}.",
+    await message.bot.send_message(partner.id,
+                                   _("Пожалуйста, подтвердите выполнение желания: {title}\n").format(
+                                       tittle=wish.title), _("Выполнил: {username}.").format(username=user.username),
                                    reply_markup=keyboard)
 
 
@@ -99,17 +105,17 @@ async def process_callback(callback_query: CallbackQuery):
     wish = await ActiveDao.get_my_active_wish(partner)
     if action == "confirm":
         if wish:
-            response_text = "Вы подтвердили действие."
+            response_text = _("Вы подтвердили действие.")
             await ActiveDao.confirm_active_wish(partner)
             await _send_accept_request(callback_query.bot, partner, user)
         else:
-            response_text = "Запрос был уже выполнен"
+            response_text = _("Запрос был уже выполнен")
     else:
         if wish:
-            response_text = "Вы отклонили действие."
+            response_text = _("Вы отклонили действие.")
             await ActiveDao.reject_active_wish(partner)
         else:
-            response_text = "Запрос был уже выполнен"
+            response_text = _("Запрос был уже выполнен")
 
     await callback_query.answer()  # Уведомление Telegram, что callback получен
     # Обновляем сообщение, удаляя клавиатуру
@@ -119,37 +125,22 @@ async def process_callback(callback_query: CallbackQuery):
                                                reply_markup=None)
 
 
-async def alert_timeout_active(bot):
-    while True:
-        active_wishes = await ActiveDao.get_all_unfulfilled_wish()
-        for active_wish in active_wishes:
-            owner = await UserDao.find_one_or_none(id=active_wish.owner_id)
-            executor = await UserDao.find_one_or_none(id=active_wish.executor_id)
-            await bot.send_message(owner.id, f"Ваше желание {active_wish.title} не выполнено,\n"
-                                             f" партнером:{executor.username}. "
-                                   )
-            await sleep(10)
-            await bot.send_message(owner.id, f"Ваше желание {active_wish.title} не выполнено,\n"
-                                             f" партнером:{executor.username}.")
-            await ActiveDao.reject_active_wish(executor)
-            print('well done')
-
-
 @active_router.message(Command('test1'))
 async def get_test(message: Message):
     active_wishes = await ActiveDao.get_all_unfulfilled_wish()
     for active_wish in active_wishes:
         owner = await UserDao.find_one_or_none(id=active_wish.owner_id)
         executor = await UserDao.find_one_or_none(id=active_wish.executor_id)
-        await message.answer(f"Ваше желание {active_wish.title} не выполнено,\n"
-                             f" партнером:{executor.username}. "
+        await message.answer(_("Ваше желание {title} не выполнено,\n").format(tittle=active_wish.title),
+                             _(" партнером:{username}.").format(executor=executor.username),
                              )
         await sleep(10)
-        await message.answer(f"Ваше желание {active_wish.title} не выполнено,\n"
-                             f" партнером:{executor.username}."
+        await message.answer(_("Ваше желание {title} не выполнено,\n").format(tittle=active_wish.title),
+                             _(" партнером:{username}.").format(username=executor.username),
                              )
 
 
 async def _send_accept_request(bot, partner, user):
-    await bot.send_message(partner.id, f" 'Спасибо большое, что выполнил мое желание' "
-                                       f"с любовью от партнера {user.username}.\n")
+    await bot.send_message(partner.id,
+                           _(" 'Спасибо большое, что выполнил мое желание' "),
+                           _("с любовью от партнера {username}.\n").format(username=user.username))

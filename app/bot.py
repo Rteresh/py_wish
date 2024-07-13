@@ -1,33 +1,24 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher, Router
+from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
+from aiogram.utils.i18n import I18n, ConstI18nMiddleware
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from app.config import settings
-from app.routers.user.user_router import user_router
-from app.routers.base.base_router import base_router
-from app.routers.wish.wish_routers import wish_router
-from app.routers.user.pair_router import pair_router
-from app.routers.menu.menu_router import menu_router
-from app.routers.wish.active_wish_router import active_router, alert_timeout_active
-from app.dao.wish.test import test_router
+from app.config import settings, DIR
+from app.dao.user.user_dao import UserDao
+from app.dao.wish.active_wish_dao import ActiveDao
+from app.routers_utis import get_routers
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=settings.TOKEN)
 dp = Dispatcher()
 
-main_router = Router()
-main_router.include_router(user_router)
-main_router.include_router(base_router)
-main_router.include_router(wish_router)
-main_router.include_router(pair_router)
-main_router.include_router(menu_router)
-main_router.include_router(active_router)
-main_router.include_router(test_router)
-dp.include_router(main_router)
+scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
 
+dp.include_router(get_routers())
 
 
 async def set_commands(bot: Bot):
@@ -47,52 +38,35 @@ async def set_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
-#
-# from aiogram import types
-# from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-#
-# from aiogram.types import Message
-#
-#
-# # Команда для отправки сообщения с кнопками
-# # Команда для отправки сообщения с кнопками
-# @dp.message(Command('test'))
-# async def send_confirmation_request(message: types.Message):
-#     # Создаем кнопки
-#     buttons = [
-#         InlineKeyboardButton(text="Подтвердить", callback_data="confirm", cache_time=0),
-#         InlineKeyboardButton(text="Отклонить", callback_data="reject", cache_time=0)
-#     ]
-#     # Создаем клавиатуру и передаем список кнопок
-#     keyboard = InlineKeyboardMarkup(inline_keyboard=[buttons])
-#     await bot.send_message(message.from_user.id, "Пожалуйста, подтвердите выполнение желания.", reply_markup=keyboard)
-#
-#
-# # Обработчик нажатий на кнопки
-# @dp.callback_query(lambda c: c.data in ['confirm', 'reject'])
-# async def process_callback(callback_query: CallbackQuery):
-#     action = callback_query.data
-#     if action == "confirm":
-#         response_text = "Вы подтвердили действие."
-#         print('Вы подтвердили действие.')
-#     else:
-#         response_text = "Вы отклонили действие."
-#         print('Вы отклонили действие.')
-#
-#     await callback_query.answer()  # Уведомление Telegram, что callback получен
-#     # Обновляем сообщение, удаляя клавиатуру
-#     await bot.edit_message_text(chat_id=callback_query.from_user.id,
-#                                 message_id=callback_query.message.message_id,
-#                                 text=response_text,
-#                                 reply_markup=None)
+async def alert_timeout_active():
+    active_wishes = await ActiveDao.get_all_unfulfilled_wish()
+    for active_wish in active_wishes:
+        owner = await UserDao.find_one_or_none(id=active_wish.owner_id)
+        executor = await UserDao.find_one_or_none(id=active_wish.executor_id)
+        await bot.send_message(owner.id, f"Ваше желание {active_wish.title} не выполнено,\n"
+                                         f" партнером:{executor.username}. ")
+        await ActiveDao.reject_active_wish(executor)
+        print('well done')
+
+
+i18n = I18n(path=DIR / 'locales', default_locale='ru', domain='messages')
+
+i18n_middleware = ConstI18nMiddleware(i18n=i18n, locale='ru')
+dp.update.middleware(i18n_middleware)
 
 
 async def main():
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+    logging.info("Starting bot...")
+    await set_commands(bot)
+    scheduler.add_job(alert_timeout_active, 'interval', days=1)
+    scheduler.start()
+
+    try:
+        await bot.delete_webhook(drop_pending_updates=True)
+        await dp.start_polling(bot, skip_updates=True)
+    finally:
+        await bot.session.close()
 
 
 if __name__ == '__main__':
     asyncio.run(main())
-    asyncio.run(set_commands(bot))
-    asyncio.create_task(alert_timeout_active(bot))

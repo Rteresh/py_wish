@@ -1,9 +1,10 @@
 from aiogram import Router
 from aiogram.filters.command import Command
 from aiogram.types import Message
+from aiogram.utils.i18n import gettext as _
 
-from app.dao.user.user_dao import UserDao
 from app.dao.user.pair_dao import PairDao
+from app.dao.user.user_dao import UserDao
 
 user_router = Router()
 
@@ -15,14 +16,14 @@ async def my_pair(message: Message):
     if pair:
         partner = await PairDao.get_my_pair(user)
         await message.answer(
-            f'Ваш партнер:{partner.username}'
+            _('Ваш партнер:{partner}').format(partner=partner.username)
         )
     else:
         await message.answer(
-            'У вас еще нет партнера!'
+            _('У вас еще нет партнера!')
         )
 
 
 @user_router.message(Command('send'))
 async def send(message: Message):
-    await message.bot.send_message(chat_id=477542023, text=f'Сосать бояться')
+    await message.bot.send_message(chat_id=477542023, text=_('Сосать бояться'))
