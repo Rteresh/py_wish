@@ -1,9 +1,8 @@
-from sqlalchemy import insert, update
-
-from app.models.user.models import User
-from app.database import async_session_maker
+from sqlalchemy import insert, update, Boolean
 
 from app.dao.base.base_dao import BaseDao
+from app.database import async_session_maker
+from app.models.user.models import User
 
 
 class UserDao(BaseDao):
@@ -47,3 +46,16 @@ class UserDao(BaseDao):
             query = update(User).where(User.id == user.id).values(email=new_email)
             await session.execute(query)
             await session.commit()
+
+    @classmethod
+    async def update_premium(cls, user: User, is_premium: Boolean):
+        async with async_session_maker() as session:
+            query = update(User).where(User.id == user.id).values(is_premium=is_premium)
+            await session.execute(query)
+            await session.commit()
+
+    @classmethod
+    async def get_username(cls, id: int):
+        user = await cls.find_one_or_none(id=id)
+        username = user.username
+        return username

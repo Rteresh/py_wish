@@ -3,12 +3,11 @@ from uuid import uuid4
 
 from sqlalchemy import insert, select, or_, and_, delete
 
+from app.config import settings, TIME_LIFE
 from app.dao.base.base_dao import BaseDao
-
-from app.config import settings
+from app.dao.user.user_dao import UserDao
 from app.database import async_session_maker
 from app.models.user.models import Pair, User, PairRequest
-from app.dao.user.user_dao import UserDao
 
 
 class PairDao(BaseDao):
@@ -53,7 +52,7 @@ class PairDao(BaseDao):
             query = select(PairRequest.__table__.columns).where(
                 and_(PairRequest.token == token, and_(
                     PairRequest.is_active.__eq__(True),
-                    (PairRequest.created_at + timedelta(minutes=10) > datetime.utcnow()  # TIME LIFE
+                    (PairRequest.created_at + timedelta(minutes=TIME_LIFE) > datetime.utcnow()  # TIME LIFE
                      )
                 )))
         result = await session.execute(query)

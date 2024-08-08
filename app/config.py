@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -12,6 +11,7 @@ class Settings(BaseSettings):
     DB_NAME: str
     TOKEN: str
     BOT_NAME: str
+    ENCRYPTION_KEY: str
 
     @property
     def database_url(self):
@@ -29,5 +29,11 @@ DIR = Path(__file__).absolute().parent
 
 I18N_DOMAIN = 'bot'
 LOCALES_DIR = f'{DIR}/locales'
+
+TIME_LIFE = 10  # minutes pair request
+
+COUNT_WISH = 3
+
+COUNT_WISH_PREMIUM = 100
 
 MEDIA_DIR = DIR / 'all_media'

@@ -7,7 +7,7 @@ from app.dao.user.pair_dao import PairDao
 from app.dao.user.user_dao import UserDao
 from app.models.user.models import PairRequest, User
 from app.routers.menu.language_router import set_language
-from app.routers.state.states import Form
+from app.routers.state.states import MenuStateForm
 
 base_router = Router()
 
@@ -23,7 +23,7 @@ async def process_start_command(message: types.Message, command: CommandObject, 
     else:
         await handle_existing_user(user, message, args, command)
 
-    await state.set_state(Form.choosing_language)
+    await state.set_state(MenuStateForm.choosing_language)
     await state.update_data(from_start=True)
     await set_language(message, state)
 
@@ -75,6 +75,7 @@ async def confirm_pair_request(message: types.Message, pair_request: PairRequest
         await message.answer(
             _('Вы успешно подтвердили свою пару!')
         )
+        await message.bot.send_message(partner.id, _('Пара с {user} создана').format(user=user.username))
 
 
 async def check_pair(user: User) -> bool:

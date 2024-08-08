@@ -27,3 +27,18 @@ async def my_pair(message: Message):
 @user_router.message(Command('send'))
 async def send(message: Message):
     await message.bot.send_message(chat_id=477542023, text=_('Сосать бояться'))
+
+# PREMIUM HERE !!!!!
+# @user_router.message(Command('tree'))
+# async def is_premium(message: Message):
+#     user = await UserDao.find_one_or_none(id=message.from_user.id)
+#     if user.is_premium:
+#         await message.answer('У тебя премиум')
+#     else:
+#         await message.answer('У тебя нет премиума')
+#
+#
+# @user_router.message(Command('traa'))
+# async def is_premium(message: Message):
+#     user = await UserDao.find_one_or_none(id=message.from_user.id)
+#     await UserDao.update_premium(user, True)

@@ -1,7 +1,8 @@
 from typing import List
 
-from app.database import async_session_maker
 from sqlalchemy import select, insert, delete
+
+from app.database import async_session_maker
 
 
 class BaseDao:

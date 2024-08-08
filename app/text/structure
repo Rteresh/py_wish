@@ -1,0 +1,87 @@
+my_project/
+├── all_media/
+│   ├── image1.jpg
+│   ├── image2.jpg
+│   └── image3.jpg
+├── bot.py
+├── config.py
+├── dao/
+│   ├── __init__.py
+│   ├── base/
+│   │   ├── __init__.py
+│   │   └── base_dao.py
+│   ├── user/
+│   │   ├── __init__.py
+│   │   ├── pair_dao.py
+│   │   └── user_dao.py
+│   └── wish/
+│       ├── __init__.py
+│       ├── active_wish_dao.py
+│       ├── test.py
+│       └── wish_dao.py
+├── database.py
+├── locales/
+│   ├── en/
+│   │   └── LC_MESSAGES/
+│   │       ├── messages.mo
+│   │       └── messages.po
+│   ├── messages.pot
+│   └── ru/
+│       └── LC_MESSAGES/
+│           ├── messages.mo
+│           └── messages.po
+├── migrations/
+│   ├── README
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions/
+│       ├── bd3bca9d17ed_all.py
+│       └── d6f996b9a19e_user_count.py
+├── models/
+│   ├── __init__.py
+│   ├── user/
+│   │   ├── __init__.py
+│   │   └── models.py
+│   └── wishes/
+│       ├── __init__.py
+│       └── models.py
+├── routers/
+│   ├── __init__.py
+│   ├── base/
+│   │   ├── __init__.py
+│   │   └── base_router.py
+│   ├── menu/
+│   │   ├── __init__.py
+│   │   ├── keyboard/
+│   │   │   ├── __init__.py
+│   │   │   ├── help_utils_menu.py
+│   │   │   ├── inline_utils_menu.py
+│   │   │   ├── keyboard_utils_menu.py
+│   │   │   ├── pair_utils_menu.py
+│   │   │   └── wish_utils_menu.py
+│   │   ├── language_router.py
+│   │   ├── menu_router.py
+│   │   └── test.py
+│   ├── state/
+│   │   ├── __init__.py
+│   │   └── states.py
+│   ├── user/
+│   │   ├── __init__.py
+│   │   ├── pair_router.py
+│   │   └── user_router.py
+│   ├── utils.py
+│   └── wish/
+│       ├── __init__.py
+│       ├── active_wish_router.py
+│       └── wish_routers.py
+├── routers_utis.py
+├── text/
+│   └── menu/
+│       ├── __init__.py
+│       ├── faq.py
+│       └── rules.py
+└── tests/
+    ├── __init__.py
+    ├── test_dao.py
+    ├── test_models.py
+    └── test_routers.py

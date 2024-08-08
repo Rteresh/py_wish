@@ -5,12 +5,13 @@ from aiogram.utils.i18n import gettext as _
 
 from app.dao.user.pair_dao import PairDao
 from app.dao.user.user_dao import UserDao
+from app.models.user.models import PairRequest
 
 pair_router = Router()
 
 
 @pair_router.message(Command('create_pair'))
-async def bot_help(message: Message):
+async def create_pair(message: Message):
     user = await UserDao.find_one_or_none(id=message.from_user.id)
     request = await PairDao.create_pair_request(user)
     await message.answer(
@@ -45,3 +46,12 @@ async def reject_pair(message: Message):
         await message.answer(
             _('Вы больше не являетесь партнерами!')
         )
+
+
+# async def schedule_delete_timeout_pair_requests() -> None:
+#     pairs_requests = await PairDao.find_all(PairRequest,
+#                                             PairRequest.)
+
+
+async def delete_pair_request(request: PairRequest) -> None:
+    await PairDao.delete_pair_request(request)

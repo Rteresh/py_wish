@@ -1,6 +1,6 @@
 from aiogram.fsm.state import StatesGroup, State
 
 
-class Form(StatesGroup):
+class MenuStateForm(StatesGroup):
     choosing_language = State()
     choosing_type = State()
