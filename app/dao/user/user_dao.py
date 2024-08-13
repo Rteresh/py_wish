@@ -59,3 +59,16 @@ class UserDao(BaseDao):
         user = await cls.find_one_or_none(id=id)
         username = user.username
         return username
+
+    @classmethod
+    async def get_language(cls, id: int):
+        user = await cls.find_one_or_none(id=id)
+        language = user.language
+        return language
+
+    @classmethod
+    async def update_language(cls, user_id: id, new_language: str):
+        async with async_session_maker() as session:
+            query = update(User).where(User.id == user_id).values(language=new_language)
+            await session.execute(query)
+            await session.commit()

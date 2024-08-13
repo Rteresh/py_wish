@@ -39,33 +39,47 @@ async def reject_wish(active_wish, user):
     :param user: Объект пользователя [хозяин или исполнитель]
 
     """
+    # Получаем желание по его ID
     wish = await WishDao.find_by_id(active_wish.wish_id)
 
+    # Отклонение активного желания пользователем
     await ActiveDao.reject_active_wish(user)
 
-    # Переносим записи
-    await HistoryDao.create_wish_history(active_wish)
+    # Обновление активного желания после принятия
+    update_wish = await ActiveDao.find_by_id(active_wish.id)
 
-    # Удаляем записи
+    # Создание записи в истории
+    await HistoryDao.create_wish_history(update_wish)
+
+    # Удаление активного желания
     await ActiveDao.delete_by_id(active_wish.id)
+
+    # Удаление самого желания
     await WishDao.delete_by_id(wish.id)
 
 
 async def accept_wish(active_wish, user):
     """
-    Принимает желание партнеру и переносит его в историю.
+    Принимает желание партнера и переносит его в историю.
 
-    :param active_wish: Объект активного желания
-    :param user: Объект пользователя [хозяин или исполнитель]
-
+    :param active_wish: Объект активного желания.
+    :param user: Объект пользователя (хозяин или исполнитель).
     """
+    # Получаем желание по его ID
     wish = await WishDao.find_by_id(active_wish.wish_id)
 
+    # Принятие активного желания пользователем
     await ActiveDao.accept_active_wish(user)
 
-    # Переносим записи
-    await HistoryDao.create_wish_history(active_wish)
+    # Обновление активного желания после принятия
+    update_wish = await ActiveDao.find_by_id(active_wish.id)
 
-    # Удаляем записи
+    # Создание записи в истории
+    await HistoryDao.create_wish_history(update_wish)
+
+    # Удаление активного желания
     await ActiveDao.delete_by_id(active_wish.id)
-    await WishDao.delete_by_id(wish)
+
+    # Удаление самого желания
+    await WishDao.delete_by_id(wish.id)
+

@@ -3,12 +3,12 @@ from aiogram import Router
 # Импорт роутеров
 from app.routers.base.base_router import base_router
 from app.routers.menu.language_router import language_router
-from app.routers.menu.menu_router import menu_router
+from app.routers.menu.faq_router import menu_router
 from app.routers.user.pair_router import pair_router
 from app.routers.user.user_router import user_router
 from app.routers.wish.active_wish_router import active_router
 from app.routers.wish.history_router import history_router
-from app.routers.wish.wish_routers import wish_router
+from app.routers.wish.wish_router import wish_router
 
 # Импорт клавиатурных роутеров
 from app.routers.menu.keyboard.help_utils_menu import help_keyboard

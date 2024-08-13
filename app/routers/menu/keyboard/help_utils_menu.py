@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.i18n import gettext as _
 
-from app.routers.menu.menu_router import help_faq
+from app.routers.menu.faq_router import help_faq
 
 help_keyboard = Router()
 

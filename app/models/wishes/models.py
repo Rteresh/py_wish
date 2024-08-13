@@ -33,7 +33,6 @@ class Wish(Base):
     fulfilled = Column(Boolean, default=False)
     fulfilled_at = Column(DateTime, nullable=True)
     active_wishes = relationship("ActiveWish", back_populates="wish")
-    history_entries = relationship("WishHistory", back_populates="wish")
 
 
 class ActiveWish(Base):
@@ -97,10 +96,8 @@ class WishHistory(Base):
     title = Column(String, index=True, nullable=False)
     owner_id = Column(BigInteger, ForeignKey('users.id'))
     executor_id = Column(BigInteger, ForeignKey('users.id'))
-    wish_id = Column(BigInteger, ForeignKey('wishes.id'))
     fulfilled = Column(Boolean, default=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
     executor = relationship("User", foreign_keys=[executor_id], backref="executed_active_wishes_history")
     owner = relationship("User", foreign_keys=[owner_id], backref="owned_active_wishes_history")
-    wish = relationship("Wish", back_populates="history_entries")

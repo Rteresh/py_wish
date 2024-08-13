@@ -2,7 +2,6 @@ from aiogram import Router, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.i18n import gettext as _
 
-from app.routers.menu.keyboard.main_keyboard_utils_menu import inline_main_menu
 from app.routers.wish.history_router import get_wish_history_owner, get_wish_history_executor
 
 history_keyboard = Router()
@@ -32,10 +31,8 @@ async def history_handler(message: types.Message):
 @history_keyboard.message(F.text.contains("Мои желаний"))
 async def get_owner_history_handler(message: types.Message):
     await get_wish_history_owner(message)
-    await inline_main_menu(message)
 
 
 @history_keyboard.message(F.text.contains("Я выполнил"))
 async def get_executor_history_handler(message: types.Message):
     await get_wish_history_executor(message)
-    await inline_main_menu(message)

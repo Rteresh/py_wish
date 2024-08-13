@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile
 
 from app.config import MEDIA_DIR
-from app.routers.menu.menu_router import help_faq
+from app.routers.menu.faq_router import help_faq
 from app.routers.state.states import MenuStateForm
 from app.routers.utils import edit_callback_message
 

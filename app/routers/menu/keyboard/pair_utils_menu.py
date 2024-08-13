@@ -2,7 +2,6 @@ from aiogram import Router, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.i18n import gettext as _
 
-from app.routers.menu.keyboard.main_keyboard_utils_menu import inline_main_menu
 from app.routers.user.pair_router import create_pair, reject_pair, get_pair
 
 pair_keyboard = Router()
@@ -32,16 +31,13 @@ async def start_game(message: types.Message):
 @pair_keyboard.message(F.text.contains("Создать пару"))
 async def add_wish_handler(message: types.Message):
     await create_pair(message)
-    await inline_main_menu(message)
 
 
 @pair_keyboard.message(F.text.contains("Мой партнер"))
 async def add_wish_handler(message: types.Message):
     await get_pair(message)
-    await inline_main_menu(message)
 
 
 @pair_keyboard.message(F.text.contains("Изменить пару"))
 async def edit_wish_handler(message: types.Message):
     await reject_pair(message)
-    await inline_main_menu(message)

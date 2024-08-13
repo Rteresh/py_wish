@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.i18n import gettext as _
 
+from app.crypto.encryption_manager import decrypt as d
 from app.dao.user.user_dao import UserDao
 from app.dao.wish.history_dao import HistoryDao
 
@@ -75,7 +76,7 @@ async def _paginate(message: Message, page: int, get_history_func, user, command
     """
     history = await get_history_func(user)
     if not history:
-        await message.answer('У вас нету историй')
+        await message.answer('Ваши желания не выполнили или нету желаний которых вы выполнили')
         return
 
     items_per_page = 10
@@ -86,14 +87,14 @@ async def _paginate(message: Message, page: int, get_history_func, user, command
     start_index = (page - 1) * items_per_page
     end_index = min(start_index + items_per_page, total_items)
 
-    table_header = _("No | Title | TEST_NAME | Fulfilled | Closed Date")
+    table_header = _("№ | Имя | Пользователь | Выполнено? | Дата завершения")
     if command == 'executor':
         table_rows = [
             _('{}. | {} | {} | {} | {}').format(
                 i + 1,
-                history[i].title,
+                d(history[i].title),
                 await UserDao.get_username(history[i].owner_id),
-                _('Yes') if history[i].fulfilled else _('No'),
+                _('Да') if history[i].fulfilled else _('Нет'),
                 history[i].timestamp.strftime('%Y-%m-%d %H:%M:%S')
             ) for i in range(start_index, end_index)
         ]
@@ -101,9 +102,9 @@ async def _paginate(message: Message, page: int, get_history_func, user, command
         table_rows = [
             _('{}. | {} | {} | {} | {}').format(
                 i + 1,
-                history[i].title,
+                d(history[i].title),
                 await UserDao.get_username(history[i].executor_id),
-                _('Yes') if history[i].fulfilled else _('No'),
+                _('Да') if history[i].fulfilled else _('Нет'),
                 history[i].timestamp.strftime('%Y-%m-%d %H:%M:%S')
             ) for i in range(start_index, end_index)
         ]

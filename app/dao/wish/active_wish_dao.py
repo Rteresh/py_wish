@@ -15,6 +15,29 @@ class ActiveDao(BaseDao):
     model = ActiveWish
 
     @classmethod
+    async def create_active_wish(cls, user: User):
+        """
+        Создает активное желание для пользователя.
+
+        :param user: Объект пользователя.
+        """
+        async with async_session_maker() as session:
+            partner = await PairDao.get_my_partner(user)
+            wish = await WishDao.get_random_wish_my_partner(user)
+            if wish is None:
+                return None
+            time = await cls._get_random_time()  # [здесь изменения ]
+            query = insert(cls.model).values(
+                executor_id=user.id,
+                owner_id=partner.id,
+                wish_id=wish.id,
+                expired_at=time,
+                title=wish.title,
+            )
+            await session.execute(query)
+            await session.commit()
+
+    @classmethod
     async def _get_random_time(cls) -> datetime:
         """
         Генерирует случайное время истечения для активного желания.
@@ -44,9 +67,9 @@ class ActiveDao(BaseDao):
             return wish
 
     @classmethod
-    async def get_my_active_wish(cls, user: User) -> ActiveWish or None:
+    async def get_wish_from_active_wish(cls, user: User) -> ActiveWish or None:
         """
-        Получает активное желание для текущего пользователя.
+        Получает желание для текущего пользователя.
 
         :param user: Объект пользователя.
         :return: Объект ActiveWish или None, если желание не найдено.
@@ -61,29 +84,6 @@ class ActiveDao(BaseDao):
             return wish
 
     @classmethod
-    async def create_active_wish(cls, user: User):
-        """
-        Создает активное желание для пользователя.
-
-        :param user: Объект пользователя.
-        """
-        async with async_session_maker() as session:
-            partner = await PairDao.get_my_partner(user)
-            wish = await WishDao.get_random_wish_my_partner(user)
-            if wish is None:
-                return None
-            time = await cls._get_random_time()  # [здесь изменения ]
-            query = insert(cls.model).values(
-                executor_id=user.id,
-                owner_id=partner.id,
-                wish_id=wish.id,
-                expired_at=time,
-                title=wish.title,
-            )
-            await session.execute(query)
-            await session.commit()
-
-    @classmethod
     async def accept_active_wish(cls, user: User):
         """
         Подтверждает выполнение активного желания для пользователя.
@@ -91,8 +91,6 @@ class ActiveDao(BaseDao):
         :param user: Объект пользователя.
         """
         async with async_session_maker() as session:
-            wish = await cls.get_my_active_wish(user)
-            await WishDao.confirm_wish(wish)
             query = update(cls.model).where(cls.model.executor_id == user.id).values(
                 fulfilled=True,
                 fulfilled_at=datetime.now(),
@@ -109,10 +107,8 @@ class ActiveDao(BaseDao):
         :param executor: Объект пользователя (исполнитель).
         """
         async with async_session_maker() as session:
-            wish = await cls.get_my_active_wish(executor)
-            await WishDao.confirm_wish(wish)
             query = update(cls.model).where(cls.model.executor_id == executor.id).values(
-                fulfilled=True,
+                fulfilled=False,
                 fulfilled_at=datetime.now(),
                 description="Не выполнил желание"
             )

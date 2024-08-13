@@ -15,14 +15,12 @@ class HistoryDao(BaseDao):
             title = active_wish.title
             owner_id = active_wish.owner_id
             executor = active_wish.executor_id
-            wish_id = active_wish.wish_id
             fulfilled = active_wish.fulfilled
 
             query = insert(cls.model).values(
                 title=title,
                 owner_id=owner_id,
                 executor_id=executor,
-                wish_id=wish_id,
                 fulfilled=fulfilled,
             )
 

@@ -38,7 +38,7 @@ class EncryptionManager:
 encryption_manager = EncryptionManager()
 
 
-def _decr(encrypted_text: str) -> str:
+def decrypt(encrypted_text: str) -> str:
     """
     Расшифровывает зашифрованное сообщение, используя менеджер шифрования.
 
@@ -51,9 +51,3 @@ def _decr(encrypted_text: str) -> str:
     """
     return encryption_manager.decrypt(encrypted_text)
 
-
-
-a = 'gAAAAABmsRlkbY_ZhJO2wgoXg1zDLX5SZ6Fe05Gx9JiyhjbMIVHcSLqLWEMRiVai2b9PiiJaTZTin0Pd8kZpYxh0irqQw-poyw=='
-
-
-print(_decr(a))

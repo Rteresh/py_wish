@@ -3,8 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.i18n import gettext as _
 
-from app.routers.menu.keyboard.main_keyboard_utils_menu import inline_main_menu
-from app.routers.wish.wish_routers import get_all_wishes, add_nwish, edit_wishes
+from app.routers.wish.wish_router import get_all_wishes, add_wish, edit_wishes
 
 wish_keyboard = Router()
 
@@ -27,25 +26,20 @@ def _get_wish_keyboard():
 
 @wish_keyboard.message(F.text.contains("Желания"))
 async def wish_handler(message: types.Message):
-    await message.reply("Пункт желания", reply_markup=_get_wish_keyboard())
+    await message.answer("Пункт желания", reply_markup=_get_wish_keyboard())
 
 
 @wish_keyboard.message(F.text.contains("Мои желания"))
 async def add_wish_handler(message: types.Message):
     await get_all_wishes(message)
-    await inline_main_menu(message)
 
 
 @wish_keyboard.message(F.text.contains("Добавить желание"))
 async def add_wish_handler(message: types.Message, state: FSMContext):
-    await add_nwish(message, state)
-    # TODO: надо после добавления желания
-    # await inline_main_menu(message)
+    await add_wish(message, state)
 
 
 @wish_keyboard.message(F.text.contains("Изменить желания"))
 async def edit_wish_handler(message: types.Message, state: FSMContext):
     # Запускаем процесс редактирования желаний
     await edit_wishes(message, state)
-    # TODO: надо после изменения желания
-    # await inline_main_menu(message)

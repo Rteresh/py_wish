@@ -4,7 +4,7 @@ from aiogram.types import FSInputFile
 from aiogram.utils.i18n import gettext as _
 
 from app.config import MEDIA_DIR
-from app.routers.menu.keyboard.main_keyboard_utils_menu import command_rrr
+from app.routers.menu.keyboard.main_keyboard_utils_menu import main_menu
 from app.routers.state.states import MenuStateForm
 from app.routers.utils import edit_callback_message
 from app.text.menu.faq import get_faq_one, get_faq_two
@@ -77,7 +77,7 @@ async def callbacks_num(callback: types.CallbackQuery, state: FSMContext):
                                     reply_markup=get_keyboard(show_faq=False, b_next=True))
     elif action == "menu":
         # TODO: не работает кнопка после второго нажатия
-        await command_rrr(callback.message)
+        await main_menu(callback.message)
     await state.clear()
 
 # ----------

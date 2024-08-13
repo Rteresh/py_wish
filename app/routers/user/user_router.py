@@ -24,9 +24,24 @@ async def my_pair(message: Message):
         )
 
 
-@user_router.message(Command('send'))
-async def send(message: Message):
-    await message.bot.send_message(chat_id=477542023, text=_('Сосать бояться'))
+@user_router.message(Command('lag1'))
+async def lag1(message: Message):
+    await message.answer(f'Ваш язык {await UserDao.get_language(message.from_user.id)}')
+
+
+@user_router.message(Command('lag2'))
+async def lag1(message: Message):
+    user_id = message.from_user.id
+    await UserDao.update_language(user_id=user_id, new_language='en')
+    await message.answer(f'Ваш язык {await UserDao.get_language(user_id)}')
+
+
+@user_router.message(Command('lag3'))
+async def lag1(message: Message):
+    user_id = message.from_user.id
+    await UserDao.update_language(user_id=user_id, new_language='ru')
+    await message.answer(f'Ваш язык {await UserDao.get_language(user_id)}')
+
 
 # PREMIUM HERE !!!!!
 # @user_router.message(Command('tree'))
