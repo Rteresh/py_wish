@@ -1,6 +1,0 @@
-db_username = rteresh
-db_password = rteresh
-
-db = wishlist
-
-pg_dump -U rteresh -W -F c -b -v -f "backup.dump" wishlist дамб
