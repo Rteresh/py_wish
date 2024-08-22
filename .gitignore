@@ -1,5 +1,6 @@
 .env
 alembic.ini
-p.text
 babel.cfg
 app/logs
+.idea
+p.text
