@@ -3,4 +3,4 @@ p.text
 alembic.ini
 babel.cfg
 app/logs
-.idea
+.idea/
