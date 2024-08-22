@@ -107,11 +107,11 @@ class BaseDao:
 
         Returns:
             None
-        """
-        async with async_session_maker() as session:
-            query = cls.model.__table__.delete()
-            await session.execute(query)
-            await session.commit()
+        # """
+        # async with async_session_maker() as session:
+        #     query = delete(cls.model)__table__.delete
+        #     await session.execute(query)
+        #     await session.commit()
 
     @classmethod
     async def delete_all_except_ids(cls, user_ids_to_keep: List[int]):

@@ -1,15 +1,20 @@
-from abc import ABC
+from typing import Dict, Any
 
-from aiogram.types import Message
+from aiogram import types
+from aiogram.types import TelegramObject
 from aiogram.utils.i18n import I18nMiddleware
 
 from app.dao.user.user_dao import UserDao
 
 
-class MyI18nMiddleware(I18nMiddleware, ABC):
+class MyI18nMiddleware(I18nMiddleware):
+    async def get_locale(self, event: TelegramObject, data: Dict[str, Any]) -> str:
+        if isinstance(event, types.Message):
+            user_id = event.from_user.id
+        elif isinstance(event, types.CallbackQuery):
+            user_id = event.from_user.id
+        else:
+            return self.i18n.default_locale
 
-    @staticmethod
-    async def get_user_locale(args: list[Message, dict[str]]):
-        user_id = args['user'].id
         user = await UserDao.find_one_or_none(id=user_id)
-        return user.language
+        return user.language if user and user.language else self.i18n.default_locale

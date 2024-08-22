@@ -22,11 +22,11 @@ class ActiveDao(BaseDao):
         :param user: Объект пользователя.
         """
         async with async_session_maker() as session:
-            partner = await PairDao.get_my_partner(user)
+            partner = await PairDao.get_partner(user)
             wish = await WishDao.get_random_wish_my_partner(user)
             if wish is None:
                 return None
-            time = await cls._get_random_time()  # [здесь изменения ]
+            time = await cls._get_random_time()  # [здесь изменения]
             query = insert(cls.model).values(
                 executor_id=user.id,
                 owner_id=partner.id,

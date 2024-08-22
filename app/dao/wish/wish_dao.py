@@ -75,7 +75,7 @@ class WishDao(BaseDao):
         :param user: Объект пользователя.
         :return: Список невыполненных желаний партнера или None, если партнера нет.
         """
-        partner = await PairDao.get_my_partner(user)
+        partner = await PairDao.get_partner(user)
         if not partner:
             return None
         return await cls.get_unfulfilled_wishes_by_user_id(partner)

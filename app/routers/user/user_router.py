@@ -14,7 +14,7 @@ async def my_pair(message: Message):
     user = await UserDao.find_one_or_none(id=message.from_user.id)
     pair = await PairDao.get_my_pair(user=user)
     if pair:
-        partner = await PairDao.get_my_pair(user)
+        partner = await PairDao.get_partner(user)
         await message.answer(
             _('Ваш партнер:{partner}').format(partner=partner.username)
         )
@@ -23,27 +23,27 @@ async def my_pair(message: Message):
             _('У вас еще нет партнера!')
         )
 
+# @user_router.message(Command('lag1'))
+# async def lag1(message: Message):
+#     await message.answer(f'Ваш язык {await UserDao.get_language(message.from_user.id)}')
+#
+#
+# @user_router.message(Command('lag2'))
+# async def lag1(message: Message):
+#     user_id = message.from_user.id
+#     await UserDao.update_language(user_id=user_id, new_language='en')
+#
+#     await message.answer(f'Ваш язык {await UserDao.get_language(user_id)}')
+#
 
-@user_router.message(Command('lag1'))
-async def lag1(message: Message):
-    await message.answer(f'Ваш язык {await UserDao.get_language(message.from_user.id)}')
-
-
-@user_router.message(Command('lag2'))
-async def lag1(message: Message):
-    user_id = message.from_user.id
-    await UserDao.update_language(user_id=user_id, new_language='en')
-    await message.answer(f'Ваш язык {await UserDao.get_language(user_id)}')
-
-
-@user_router.message(Command('lag3'))
-async def lag1(message: Message):
-    user_id = message.from_user.id
-    await UserDao.update_language(user_id=user_id, new_language='ru')
-    await message.answer(f'Ваш язык {await UserDao.get_language(user_id)}')
-
-
-# PREMIUM HERE !!!!!
+# @user_router.message(Command('lag3'))
+# async def lag1(message: Message):
+#     user_id = message.from_user.id
+#     await UserDao.update_language(user_id=user_id, new_language='ru')
+#     await message.answer(f'Ваш язык {await UserDao.get_language(user_id)}')
+#
+#
+# # PREMIUM HERE !!!!!
 # @user_router.message(Command('tree'))
 # async def is_premium(message: Message):
 #     user = await UserDao.find_one_or_none(id=message.from_user.id)

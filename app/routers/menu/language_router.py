@@ -48,6 +48,7 @@ async def callbacks_language(callback: types.CallbackQuery, state: FSMContext):
                                     caption="Основной язык русский",
                                     img_path='image3.jpg',
                                     reply_markup=get_keyboard())
+        await state.update_data(language='ru')
     if action == "en":
         await edit_callback_message(callback,
                                     caption="Main language English",

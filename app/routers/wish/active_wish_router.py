@@ -35,7 +35,7 @@ async def _get_partner_for_user(user: User) -> User:
     :param user: Объект пользователя, для которого ищется партнер.
     :return: Объект User, представляющий партнера, или None.
     """
-    return await PairDao.get_my_partner(user)
+    return await PairDao.get_partner(user)
 
 
 async def create_active_wish(message: Message) -> None:

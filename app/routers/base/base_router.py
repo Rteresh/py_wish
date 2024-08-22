@@ -49,7 +49,7 @@ async def handle_existing_user(user, message, args, command):
 async def check_pair_request(args: str, url_api: str, message: types.Message) -> PairRequest or None:
     if args and 'testp_' in args:
         token = args.split('_')[1]
-        pair_request = await PairDao.get_pair_request(token)
+        pair_request = await PairDao.get_pair_request_by_token(token)
         if not pair_request:
             await message.answer(
                 _('Запрос на пару не найден или недействительный')

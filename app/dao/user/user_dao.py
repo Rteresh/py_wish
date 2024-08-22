@@ -1,4 +1,4 @@
-from sqlalchemy import insert, update, Boolean
+from sqlalchemy import insert, update
 
 from app.dao.base.base_dao import BaseDao
 from app.database import async_session_maker
@@ -11,10 +11,11 @@ class UserDao(BaseDao):
     @classmethod
     async def create_user(cls, data):
         """
-        Метод create_user создает новую запись пользователя в базе данных.
+        Метод создает новую запись пользователя в базе данных.
 
         Args:
             data: Объект, содержащий данные о пользователе.
+            Ожидаются атрибуты id, username, first_name, last_name, language_code.
 
         Returns:
             None
@@ -33,7 +34,7 @@ class UserDao(BaseDao):
     @classmethod
     async def update_email(cls, user: User, new_email: str):
         """
-        Метод update_email обновляет адрес электронной почты пользователя.
+        Метод обновляет адрес электронной почты пользователя.
 
         Args:
             user: Объект пользователя, для которого необходимо обновить адрес электронной почты.
@@ -48,26 +49,66 @@ class UserDao(BaseDao):
             await session.commit()
 
     @classmethod
-    async def update_premium(cls, user: User, is_premium: Boolean):
+    async def update_premium(cls, user: User, is_premium: bool):
+        """
+        Метод обновляет статус премиум-подписки пользователя.
+
+        Args:
+            user: Объект пользователя, для которого необходимо обновить статус.
+            is_premium: Логическое значение, указывающее на наличие премиум-подписки.
+
+        Returns:
+            None
+        """
         async with async_session_maker() as session:
             query = update(User).where(User.id == user.id).values(is_premium=is_premium)
             await session.execute(query)
             await session.commit()
 
     @classmethod
-    async def get_username(cls, id: int):
-        user = await cls.find_one_or_none(id=id)
-        username = user.username
-        return username
+    async def get_username(cls, user_id: int):
+        """
+        Метод возвращает имя пользователя по его идентификатору.
+
+        Args:
+            user_id: Идентификатор пользователя.
+
+        Returns:
+            str: Имя пользователя или None, если пользователь не найден.
+        """
+        user = await cls.find_one_or_none(id=user_id)
+        if user is None:
+            return None
+        return user.username
 
     @classmethod
-    async def get_language(cls, id: int):
-        user = await cls.find_one_or_none(id=id)
-        language = user.language
-        return language
+    async def get_language(cls, user_id: int):
+        """
+        Метод возвращает язык пользователя по его идентификатору.
+
+        Args:
+            user_id: Идентификатор пользователя.
+
+        Returns:
+            str: Язык пользователя или None, если пользователь не найден.
+        """
+        user = await cls.find_one_or_none(id=user_id)
+        if user is None:
+            return None
+        return user.language
 
     @classmethod
-    async def update_language(cls, user_id: id, new_language: str):
+    async def update_language(cls, user_id: int, new_language: str):
+        """
+        Метод обновляет язык пользователя.
+
+        Args:
+            user_id: Идентификатор пользователя.
+            new_language: Новый язык пользователя.
+
+        Returns:
+            None
+        """
         async with async_session_maker() as session:
             query = update(User).where(User.id == user_id).values(language=new_language)
             await session.execute(query)

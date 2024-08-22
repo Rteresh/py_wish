@@ -61,6 +61,11 @@ async def _flag(message: types.Message) -> bool:
     user = await UserDao.find_by_id(message.from_user.id)
     return await ActiveDao.check_active_wish(user)
 
+
+@main_keyboard.message(F.text.contains('Режим 18+'))
+async def premium_main(message: types.Message):
+    await message.answer("Пока недоступно/скоро...", reply_markup=get_main_keyboard(await _flag(message)))
+
 # inline menu back
 
 # def _get_inline_main_keyboard():
