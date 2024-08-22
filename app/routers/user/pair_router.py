@@ -3,7 +3,6 @@ from aiogram.filters.command import Command
 from aiogram.types import Message
 from aiogram.utils.i18n import gettext as _
 
-from app.config import settings
 from app.dao.user.pair_dao import PairDao
 from app.dao.user.user_dao import UserDao
 from app.models.user.models import PairRequest
@@ -19,23 +18,23 @@ async def create_pair(message: Message):
     :param message: Сообщение от пользователя.
     """
     user = await UserDao.find_one_or_none(id=message.from_user.id)
+    partner = await PairDao.get_partner(user=user)
+    request = await PairDao.get_pair_request_by_user(user)
     if not user:
         await message.answer(_('Пользователь не найден.'))
         return
-
-    request = await PairDao.get_pair_request_by_user(user)
-
-    if await PairDao.get_my_pair(user):
+    if partner:
         await message.answer(_('У вас уже есть партнер!'))
         return
-    if bool(request):
-        token = request.token
-        confirmation_link = f'https://t.me/{settings.BOT_NAME}?start=testp_{token}'
-        await message.answer(f'ВОТ ВАША ССЫЛКА {confirmation_link} ')
+    if request:
+        confirmation_link = PairDao.generate_confirmation_link(token=request.token)
+        await message.answer(_('Вот ваш созданный ранее запрос{link}.\n'
+                               'Запрос действует в течении часа').format(link=confirmation_link))
         return
     else:
         request = await PairDao.create_pair_request(user)
-        await message.answer(_('Запрос на пару создан: {request}').format(request=request))
+        await message.answer(_('Запрос на пару создан: {request}\n'
+                               'Запрос действует в течении часа').format(request=request))
 
 
 @pair_router.message(Command('get_pair'))

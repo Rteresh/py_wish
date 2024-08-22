@@ -1,3 +1,5 @@
+import logging
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -53,4 +55,24 @@ COUNT_WISH_PREMIUM = 100  # Количество желаний для прем�
 
 MEDIA_DIR = DIR / 'all_media'  # Директория для хранения медиафайлов
 
+LOGS_DIR = DIR / 'logs'  # Директория для хранения логов
+
 MAX_WISH_LENGTH = 128  # Максимальная длина желания в символах
+
+
+def setup_logging():
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)  # Уровень логирования
+
+    # обработчик ротации логов
+    handler = RotatingFileHandler(
+        LOGS_DIR / 'app.log',  # Имя файла лога
+        maxBytes=5 * 1024 * 1024,  # Максимальный размер файла (5 MB)
+    )
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    logger.addHandler(handler)
+
+    # обработчик вывода в консоль
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    logger.addHandler(console_handler)

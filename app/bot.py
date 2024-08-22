@@ -7,7 +7,7 @@ from aiogram.types import BotCommand, Message
 from aiogram.utils.i18n import I18n, FSMI18nMiddleware, I18nMiddleware, SimpleI18nMiddleware  # noqa,
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from app.config import settings, DIR
+from app.config import settings, DIR, setup_logging
 from app.dao.user.pair_dao import PairDao
 from app.dao.user.user_dao import UserDao
 from app.dao.wish.active_wish_dao import ActiveDao
@@ -15,7 +15,7 @@ from app.routers.utils import reject_wish
 from app.routers_utis import get_routers
 from crypto.encryption_manager import decrypt as d
 
-logging.basicConfig(level=logging.INFO)
+setup_logging()
 
 bot = Bot(token=settings.TOKEN)
 dp = Dispatcher()

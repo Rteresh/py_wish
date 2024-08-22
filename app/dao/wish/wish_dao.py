@@ -1,7 +1,9 @@
+import logging
 import random
 from datetime import datetime
 
 from sqlalchemy import insert, select, and_, update
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.crypto.encryption_manager import EncryptionManager
 from app.dao.base.base_dao import BaseDao
@@ -11,6 +13,8 @@ from app.models.user.models import User
 from app.models.wishes.models import Wish
 
 encryption_manager = EncryptionManager()
+
+logger = logging.getLogger("WISH_DAO")
 
 
 class WishDao(BaseDao):
@@ -32,9 +36,18 @@ class WishDao(BaseDao):
                 )
                 await session.execute(query)
                 await session.commit()
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in create_wish: {e}")
+                raise
+
             except Exception as e:
+                logger.error(f"An unexpected error occurred in create_wish: {e}")
                 await session.rollback()
                 raise RuntimeError(f"Ошибка при создании желания: {e}")
+
+            finally:
+                await session.close()
 
     @classmethod
     async def get_all_wish_by_user(cls, user: User):
@@ -45,9 +58,21 @@ class WishDao(BaseDao):
         :return: Список желаний.
         """
         async with async_session_maker() as session:
-            query = select(cls.model).where(cls.model.user_id == user.id).order_by(cls.model.id.desc())
-            result = await session.execute(query)
-            return result.scalars().all()
+            try:
+                query = select(cls.model).where(cls.model.user_id == user.id).order_by(cls.model.id.desc())
+                result = await session.execute(query)
+                return result.scalars().all()
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in get_all_wish_by_user: {e}")
+                raise
+
+            except Exception as e:
+                logger.error(f"An unexpected error occurred in get_all_wish_by_user: {e}")
+                raise
+
+            finally:
+                await session.close()
 
     @classmethod
     async def get_unfulfilled_wishes_by_user_id(cls, user: User):
@@ -58,14 +83,26 @@ class WishDao(BaseDao):
         :return: Список невыполненных желаний.
         """
         async with async_session_maker() as session:
-            query = select(cls.model).where(
-                and_(
-                    cls.model.user_id == user.id,
-                    cls.model.fulfilled == False
+            try:
+                query = select(cls.model).where(
+                    and_(
+                        cls.model.user_id == user.id,
+                        cls.model.fulfilled.is_(False)  # TODO check
+                    )
                 )
-            )
-            result = await session.execute(query)
-            return result.scalars().all()
+                result = await session.execute(query)
+                return result.scalars().all()
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in get_unfulfilled_wishes_by_user_id: {e}")
+                raise
+
+            except Exception as e:
+                logger.error(f"An unexpected error occurred in get_unfulfilled_wishes_by_user_id: {e}")
+                raise
+
+            finally:
+                await session.close()
 
     @classmethod
     async def get_wishes_my_partner(cls, user: User):
@@ -109,9 +146,17 @@ class WishDao(BaseDao):
                 )
                 await session.execute(query)
                 await session.commit()
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in confirm_wish: {e}")
+                raise
+
             except Exception as e:
                 await session.rollback()
                 raise RuntimeError(f"Ошибка при подтверждении выполнения желания: {e}")
+
+            finally:
+                await session.close()
 
     @classmethod
     async def reject_wish(cls, wish: Wish):
@@ -129,9 +174,16 @@ class WishDao(BaseDao):
                 )
                 await session.execute(query)
                 await session.commit()
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in reject_wish: {e}")
+                raise
+
             except Exception as e:
                 await session.rollback()
                 raise RuntimeError(f"Ошибка при отклонении желания: {e}")
+
+            finally:
+                await session.close()
 
     @classmethod
     async def update_wish(cls, wish: Wish, text: str):
@@ -148,6 +200,14 @@ class WishDao(BaseDao):
                 )
                 await session.execute(query)
                 await session.commit()
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in update_wish: {e}")
+                raise
+
             except Exception as e:
                 await session.rollback()
                 raise RuntimeError(f"Ошибка при обновлении желания: {e}")
+
+            finally:
+                await session.close()
