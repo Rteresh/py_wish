@@ -60,6 +60,6 @@ async def scheduler_run(bot: Bot):
     Args:
         bot (Bot): Экземпляр бота для передачи в задачи планировщика.
     """
-    scheduler.add_job(alert_timeout_active, 'interval', minutes=1, args=[bot])
-    scheduler.add_job(alert_pair_request, 'interval', minutes=1)
+    scheduler.add_job(alert_timeout_active, 'interval', days=1, args=[bot])
+    scheduler.add_job(alert_pair_request, 'interval', days=1)
     scheduler.start()

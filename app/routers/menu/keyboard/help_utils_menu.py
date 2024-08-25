@@ -8,7 +8,7 @@ from app.routers.menu.faq_router import help_faq
 help_keyboard = Router()
 
 
-def get_help_keyboard():
+def _get_help_keyboard():
     buttons = [
         [KeyboardButton(text="Часто задаваемые вопросы FAQ"),
          KeyboardButton(text="Связаться с нами")],
@@ -24,10 +24,10 @@ def get_help_keyboard():
 
 
 @help_keyboard.message(F.text.contains("Часто задаваемые вопросы FAQ"))
-async def start_game(message: types.Message, state: FSMContext):
+async def faq_menu(message: types.Message, state: FSMContext):
     await help_faq(message, state)
 
 
 @help_keyboard.message(F.text.contains("Помощь"))
 async def help_utils(message: types.Message):
-    await message.reply("Пункт помощи", reply_markup=get_help_keyboard())
+    await message.reply("Пункт помощи", reply_markup=_get_help_keyboard())

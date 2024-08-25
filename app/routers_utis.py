@@ -17,6 +17,7 @@ from app.routers.menu.keyboard.main_keyboard_utils_menu import main_keyboard
 from app.routers.menu.keyboard.pair_utils_menu import pair_keyboard
 from app.routers.menu.keyboard.start_utils_menu import start_keyboard
 from app.routers.menu.keyboard.wish_utils_menu import wish_keyboard
+from app.routers.menu.keyboard.settings_utils_menu import settings_keyboard
 
 
 def get_routers() -> Router:
@@ -46,5 +47,6 @@ def get_routers() -> Router:
     main_router.include_router(history_router)
     main_router.include_router(history_keyboard)
     main_router.include_router(start_keyboard)
+    main_router.include_router(settings_keyboard)
 
     return main_router

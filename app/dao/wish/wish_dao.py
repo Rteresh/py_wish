@@ -87,7 +87,7 @@ class WishDao(BaseDao):
                 query = select(cls.model).where(
                     and_(
                         cls.model.user_id == user.id,
-                        cls.model.fulfilled.is_(False)  # TODO check
+                        cls.model.fulfilled.is_(False)
                     )
                 )
                 result = await session.execute(query)

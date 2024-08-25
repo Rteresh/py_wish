@@ -6,7 +6,7 @@ from aiogram.utils.i18n import gettext as _
 from app.dao.user.pair_dao import PairDao
 from app.dao.user.user_dao import UserDao
 from app.models.user.models import PairRequest, User
-from app.routers.menu.language_router import set_language
+from app.routers.menu.language_router import display_language_selection
 from app.routers.state.states import MenuStateForm
 
 base_router = Router()
@@ -25,7 +25,7 @@ async def process_start_command(message: types.Message, command: CommandObject, 
 
     await state.set_state(MenuStateForm.choosing_language)
     await state.update_data(from_start=True)
-    await set_language(message, state)
+    await display_language_selection(message, state)
 
 
 async def handle_new_user(data, message, args, url_api):
