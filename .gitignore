@@ -4,3 +4,4 @@ alembic.ini
 babel.cfg
 app/logs
 .idea/
+.gitignore

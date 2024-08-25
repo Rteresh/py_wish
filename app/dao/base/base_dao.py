@@ -37,7 +37,7 @@ class BaseDao:
                 await session.close()
 
     @classmethod
-    async def find_all(cls, **filter_by):
+    async def find_all(cls, **filter_by) -> List:
         """
         Метод find_all возвращает все записи, соответствующие заданным фильтрам.
 
@@ -55,7 +55,8 @@ class BaseDao:
 
                 query = select(cls.model).filter_by(**filter_by)
                 result = await session.execute(query)
-                return result.scalars().all()
+                models = result.scalars().all()
+                return models
 
             except SQLAlchemyError as e:
                 logger.error(f"Database error occurred find_all: {e}")
