@@ -24,8 +24,8 @@ def get_main_keyboard(active_wish=False):
         ],
         [KeyboardButton(text="🔞 Режим 18+")],
         [
-            KeyboardButton(text="❓ Помощь"),
-            KeyboardButton(text="⚙️ Настройки")
+            KeyboardButton(text=_("❓Помощь")),
+            KeyboardButton(text="⚙️Настройки")
         ],
     ]
 

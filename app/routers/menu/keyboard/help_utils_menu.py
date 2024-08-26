@@ -2,6 +2,7 @@ from aiogram import Router, F, types
 from aiogram.fsm.context import FSMContext
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
 
 from app.routers.menu.faq_router import help_faq
 
@@ -10,9 +11,9 @@ help_keyboard = Router()
 
 def _get_help_keyboard():
     buttons = [
-        [KeyboardButton(text="Часто задаваемые вопросы FAQ"),
-         KeyboardButton(text="Связаться с нами")],
-        [KeyboardButton(text="Назад в меню")]
+        [KeyboardButton(text=_("Часто задаваемые вопросы FAQ")),
+         KeyboardButton(text=_("Связаться с нами"))],
+        [KeyboardButton(text=_("Назад в меню"))]
     ]
     keyboard = ReplyKeyboardMarkup(
         keyboard=buttons,
@@ -23,11 +24,11 @@ def _get_help_keyboard():
     return keyboard
 
 
-@help_keyboard.message(F.text.contains("Часто задаваемые вопросы FAQ"))
+@help_keyboard.message(F.text == __("Часто задаваемые вопросы FAQ"))
 async def faq_menu(message: types.Message, state: FSMContext):
     await help_faq(message, state)
 
 
-@help_keyboard.message(F.text.contains("Помощь"))
+@help_keyboard.message(F.text == (__("❓Помощь")))
 async def help_utils(message: types.Message):
     await message.reply("Пункт помощи", reply_markup=_get_help_keyboard())
