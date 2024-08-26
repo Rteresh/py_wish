@@ -5,7 +5,7 @@ from uuid import uuid4
 from sqlalchemy import insert, select, or_, and_, delete
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.config import settings, TIME_LIFE
+from app.config import settings
 from app.config import setup_logging  # noqa
 from app.dao.base.base_dao import BaseDao
 from app.dao.user.user_dao import UserDao
@@ -154,7 +154,7 @@ class PairDao(BaseDao):
                 query = select(PairRequest.__table__.columns).where(
                     and_(PairRequest.token == token, and_(
                         PairRequest.is_active.__eq__(True),
-                        (PairRequest.created_at + timedelta(minutes=TIME_LIFE) > datetime.utcnow()  # TIME LIFE
+                        (PairRequest.created_at + timedelta(minutes=settings.TIME_LIFE) > datetime.utcnow()  # TIME LIFE
                          )
                     )))
                 result = await session.execute(query)
@@ -273,7 +273,7 @@ class PairDao(BaseDao):
         async with async_session_maker() as session:
             try:
                 query = delete(PairRequest).where(
-                    PairRequest.created_at + timedelta(minutes=TIME_LIFE) < datetime.utcnow()
+                    PairRequest.created_at + timedelta(minutes=settings.TIME_LIFE) < datetime.utcnow()
                 )
                 await session.execute(query)
                 await session.commit()
@@ -305,7 +305,7 @@ class PairDao(BaseDao):
                 query = select(PairRequest.__table__.columns).where(
                     and_(PairRequest.user_id == user.id, and_(
                         PairRequest.is_active.__eq__(True),
-                        (PairRequest.created_at + timedelta(minutes=TIME_LIFE) > datetime.utcnow()  # TIME LIFE
+                        (PairRequest.created_at + timedelta(minutes=settings.TIME_LIFE) > datetime.utcnow()  # TIME LIFE
                          )
                     )))
                 result = await session.execute(query)

@@ -21,6 +21,13 @@ class Settings(BaseSettings):
     BOT_NAME: str
     ENCRYPTION_KEY: str
 
+    TIME_LIFE_PROMOCODE: int
+    COUNT_WISH: int
+    COUNT_WISH_PREMIUM: int
+    TIME_LIFE: int
+    MAX_WISH_LENGTH: int
+
+
     @property
     def database_url(self) -> str:
         """
@@ -49,16 +56,10 @@ I18N_DOMAIN = 'bot'  # Домен интернационализации
 LOCALES_DIR = f'{DIR}/locales'  # Директория для locales
 
 # Настройки времени жизни запросов и лимитов
-TIME_LIFE = 10  # Время жизни запроса пары в минутах
-COUNT_WISH = 3  # Количество желаний для обычных пользователей
-COUNT_WISH_PREMIUM = 100  # Количество желаний для премиум пользователей
-TIME_LIFE_PROMOCODE = 30  # Количество дней жизни промо кода
 
 MEDIA_DIR = DIR / 'all_media'  # Директория для хранения медиафайлов
 
 LOGS_DIR = DIR / 'logs'  # Директория для хранения логов
-
-MAX_WISH_LENGTH = 128  # Максимальная длина желания в символах
 
 
 def setup_logging():

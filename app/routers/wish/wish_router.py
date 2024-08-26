@@ -7,7 +7,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.i18n import gettext as _
 
-from app.config import COUNT_WISH, COUNT_WISH_PREMIUM, MAX_WISH_LENGTH
+from app.config import settings
 from app.crypto.encryption_manager import decrypt as d
 from app.dao.user.user_dao import UserDao
 from app.dao.wish.wish_dao import WishDao
@@ -36,7 +36,7 @@ async def _add_wish(message: Message, text: str) -> bool:
     :return: True, если желание добавлено успешно, иначе False.
     """
     text = text.lstrip('/')  # Удаляем начальный слэш, если он есть
-    if len(text) > MAX_WISH_LENGTH:
+    if len(text) > settings.MAX_WISH_LENGTH:
         return False
     user = await UserDao.find_by_id(message.from_user.id)
     await WishDao.create_wish(text=text, user=user)
@@ -51,7 +51,7 @@ async def check_wish_limit(user) -> bool:
     :return: True, если пользователь не достиг лимита, иначе False.
     """
     wishes = await WishDao.get_all_wish_by_user(user)
-    limit = COUNT_WISH_PREMIUM if user.is_premium else COUNT_WISH
+    limit = settings.COUNT_WISH_PREMIUM if user.is_premium else settings.COUNT_WISH
     return len(wishes) < limit
 
 
