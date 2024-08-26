@@ -16,6 +16,12 @@ class HistoryDao(BaseDao):
 
     @classmethod
     async def create_wish_history(cls, active_wish):
+        """
+        Создает запись истории желания в базе данных.
+
+        Args:
+            active_wish: Активное желание, для которого создается запись истории.
+        """
         async with async_session_maker() as session:
             try:
                 title = active_wish.title
@@ -40,11 +46,18 @@ class HistoryDao(BaseDao):
             except Exception as e:
                 logger.error(f"An unexpected error occurred in create_wish_history: {e}")
                 raise
-            finally:
-                await session.close()
 
     @classmethod
     async def get_all_wish_history_by_owner(cls, user: User):
+        """
+         Возвращает всю историю желаний для указанного владельца.
+
+         Args:
+             user: Пользователь, чью историю желаний нужно получить.
+
+         Returns:
+             List: Список объектов истории желаний.
+         """
         async with async_session_maker() as session:
             try:
                 query = select(cls.model).where(cls.model.owner_id == user.id)
@@ -64,6 +77,16 @@ class HistoryDao(BaseDao):
 
     @classmethod
     async def get_all_active_wish_history_by_executor(cls, user: User):
+        """
+                Возвращает всю активную историю желаний для указанного исполнителя.
+
+                Args:
+                    user: Пользователь, чьи активные желания нужно получить.
+
+                Returns:
+                    List: Список объектов активной истории желаний.
+
+                """
         async with async_session_maker() as session:
             try:
                 query = select(cls.model).where(cls.model.executor_id == user.id)
