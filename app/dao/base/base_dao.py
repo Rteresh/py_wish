@@ -98,7 +98,7 @@ class BaseDao:
                 await session.close()
 
     @classmethod
-    async def find_by_id(cls, model_id: int) -> dict or None:
+    async def find_by_id(cls, model_id: int):
         """
         Метод find_by_id возвращает запись по её идентификатору.
 
@@ -110,9 +110,9 @@ class BaseDao:
         """
         async with async_session_maker() as session:
             try:
-                query = select(cls.model.__table__.columns).filter_by(id=model_id)
+                query = select(cls.model).filter_by(id=model_id)
                 result = await session.execute(query)
-                return result.mappings().one_or_none()
+                return result.scalar_one_or_none()
 
             except SQLAlchemyError as e:
                 logger.error(f"Database error occurred find_by_id: {e}")

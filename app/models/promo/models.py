@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from sqlalchemy import Column, String, DateTime, Boolean, BigInteger
+from sqlalchemy import Column, String, DateTime, Boolean, BigInteger, Integer
 
-from app.config import settings
 from app.database import Base
 
 
@@ -16,6 +15,7 @@ class Promo(Base):
         is_active (bool): Флаг, указывающий, активен ли промокод. По умолчанию True.
         created_at (datetime): Время создания промокода. По умолчанию текущее время.
         finished_at (datetime): Время завершения промокода. Может быть пустым.
+        premium_duration (int): Длительность премиум-подписки в месяцах. По умолчанию 1.
     """
     __tablename__ = "promo"
 
@@ -24,16 +24,7 @@ class Promo(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     finished_at = Column(DateTime, nullable=True)
-
-    def __init__(self, **kwargs):
-        """
-        Инициализация модели промокода. Устанавливает время завершения промокода.
-
-        :param kwargs: Параметры мод
-        """
-        super().__init__(**kwargs)
-
-        self.finished_at = datetime.utcnow() + timedelta(days=settings.TIME_LIFE_PROMOCODE)
+    premium_duration = Column(Integer, nullable=False, default=1)  # Длительность премиум-подписки в месяцах
 
     def is_valid(self):
         """

@@ -9,6 +9,7 @@ from app.routers.user.user_router import user_router
 from app.routers.wish.active_wish_router import active_router
 from app.routers.wish.history_router import history_router
 from app.routers.wish.wish_router import wish_router
+from app.routers.promo.promo_routers import promo_router
 
 # Импорт клавиатурных роутеров
 from app.routers.menu.keyboard.help_utils_menu import help_keyboard
@@ -38,6 +39,7 @@ def get_routers() -> Router:
     main_router.include_router(menu_router)
     main_router.include_router(active_router)
     main_router.include_router(language_router)
+    main_router.include_router(promo_router)
 
     # Подключение клавиатурных роутеров
     main_router.include_router(main_keyboard)

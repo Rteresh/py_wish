@@ -1,6 +1,7 @@
 import logging
+from datetime import timedelta, datetime
 
-from sqlalchemy import insert, update
+from sqlalchemy import insert, update, select
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.dao.base.base_dao import BaseDao
@@ -78,20 +79,27 @@ class UserDao(BaseDao):
                 await session.close()
 
     @classmethod
-    async def update_premium(cls, user: User, is_premium: bool):
+    async def update_premium(cls, user: User, is_premium: bool, time: int):
         """
         Метод обновляет статус премиум-подписки пользователя.
 
         Args:
             user: Объект пользователя, для которого необходимо обновить статус.
             is_premium: Логическое значение, указывающее на наличие премиум-подписки.
+            time: Длительность премиум-подписки в днях.
 
         Returns:
             None
         """
         async with async_session_maker() as session:
             try:
-                query = update(User).where(User.id == user.id).values(is_premium=is_premium)
+                if user.time_premium and user.is_valid_premium():
+                    time_premium = user.time_premium + timedelta(days=time * 30)
+                else:
+                    time_premium = datetime.utcnow() + timedelta(days=time * 30)
+                query = update(User).where(User.id == user.id).values(
+                    is_premium=is_premium,
+                    time_premium=time_premium)
                 await session.execute(query)
                 await session.commit()
 
@@ -164,3 +172,20 @@ class UserDao(BaseDao):
 
             finally:
                 await session.close()
+
+    @classmethod
+    async def check_premium(cls, user_id: int) -> datetime:
+        """
+        Метод проверяет статус премиум-подписки пользователя.
+
+        Args:
+            user_id: Идентификатор пользователя.
+
+        Returns:
+            datetime: Время окончания премиум-подписки пользователя или None, если подписка не активна.
+        """
+        user = await cls.find_one_or_none(id=user_id)
+        if user is None:
+            return None
+        return user.time_premium
+

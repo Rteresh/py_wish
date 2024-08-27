@@ -89,7 +89,6 @@ def _get_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-@wish_router.message(Command('add_wish'))
 async def add_wish(message: Message, state: FSMContext) -> None:
     """
     Обработчик команды /add_wish. Начинает процесс добавления нового желания.

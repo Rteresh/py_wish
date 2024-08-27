@@ -34,9 +34,20 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     is_matched = Column(Boolean, default=False)
     is_premium = Column(Boolean, default=False)
+    time_premium = Column(DateTime, nullable=True)
+    test = Column(DateTime, nullable=True)
 
     wishes = relationship("Wish", back_populates="user", cascade="all, delete")
     pair_requests = relationship("PairRequest", back_populates="user", cascade="all, delete")
+
+    def is_valid_premium(self):
+        """
+        Проверяет действительность премиум-статуса пользователя.
+
+        Возвращает True, если пользователь является премиум-пользователем и срок его премиум-статуса не истек.
+        """
+        return self.is_premium and self.time_premium > datetime.utcnow()
+
 
 
 class Pair(Base):
