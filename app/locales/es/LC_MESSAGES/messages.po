@@ -1,0 +1,434 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-08-26 18:33+0300\n"
+"PO-Revision-Date: 2024-08-08 23:37+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: app/routers/base/base_router.py:33
+msgid "Вы успешно зарегистрированы!"
+msgstr ""
+
+#: app/routers/base/base_router.py:46
+msgid "Вы уже состоите в паре!"
+msgstr ""
+
+#: app/routers/base/base_router.py:55
+msgid "Запрос на пару не найден или недействительный"
+msgstr ""
+
+#: app/routers/base/base_router.py:65
+#: app/routers/wish/active_wish_router.py:146
+msgid "Партнер не найден"
+msgstr ""
+
+#: app/routers/base/base_router.py:69
+msgid "Нельзя создать пару с самим собой! "
+msgstr ""
+
+#: app/routers/base/base_router.py:76
+msgid "Вы успешно подтвердили свою пару!"
+msgstr ""
+
+#: app/routers/base/base_router.py:78
+msgid "Пара с {user} создана"
+msgstr ""
+
+#: app/routers/menu/faq_router.py:26
+msgid "Нажмите на одну из кнопок, чтобы бот отправил число от 1 до 10"
+msgstr ""
+
+#: app/routers/menu/faq_router.py:37
+msgid "Назад"
+msgstr ""
+
+#: app/routers/menu/faq_router.py:40
+msgid "Дальше"
+msgstr ""
+
+#: app/routers/menu/faq_router.py:43
+msgid "Правила пользования 📖"
+msgstr ""
+
+#: app/routers/menu/faq_router.py:46
+msgid "FAQ \\ud83e\\udde0"
+msgstr ""
+
+#: app/routers/menu/faq_router.py:48
+msgid "Главное меню"
+msgstr ""
+
+#: app/routers/menu/keyboard/help_utils_menu.py:14
+#: app/routers/menu/keyboard/help_utils_menu.py:27
+msgid "Часто задаваемые вопросы FAQ"
+msgstr ""
+
+#: app/routers/menu/keyboard/help_utils_menu.py:15
+msgid "Связаться с нами"
+msgstr ""
+
+#: app/routers/menu/keyboard/help_utils_menu.py:16
+#: app/routers/menu/keyboard/main_keyboard_utils_menu.py:53
+#: app/routers/menu/keyboard/settings_utils_menu.py:21
+msgid "Назад в меню"
+msgstr ""
+
+#: app/routers/menu/keyboard/help_utils_menu.py:22
+#: app/routers/menu/keyboard/histroy_utils_menu.py:21
+#: app/routers/menu/keyboard/main_keyboard_utils_menu.py:36
+#: app/routers/menu/keyboard/pair_utils_menu.py:21
+#: app/routers/menu/keyboard/settings_utils_menu.py:27
+#: app/routers/menu/keyboard/start_utils_menu.py:34
+#: app/routers/menu/keyboard/wish_utils_menu.py:22
+msgid "Выберите пункт меню"
+msgstr ""
+
+#: app/routers/menu/keyboard/help_utils_menu.py:30
+msgid "hello меня зовут и тд"
+msgstr ""
+
+#: app/routers/menu/keyboard/help_utils_menu.py:33
+msgid "Помощь"
+msgstr ""
+
+#: app/routers/menu/keyboard/histroy_utils_menu.py:28
+msgid "Пункт истории"
+msgstr ""
+
+#: app/routers/menu/keyboard/main_keyboard_utils_menu.py:14
+msgid "🎯 Активное желание"
+msgstr ""
+
+#: app/routers/menu/keyboard/main_keyboard_utils_menu.py:27
+msgid "❓Помощь"
+msgstr ""
+
+#: app/routers/menu/keyboard/main_keyboard_utils_menu.py:57
+msgid "Удачи в выполнении"
+msgstr ""
+
+#: app/routers/menu/keyboard/settings_utils_menu.py:19
+msgid "ЧТО-ТО НОВОЕ"
+msgstr ""
+
+#: app/routers/menu/keyboard/settings_utils_menu.py:20
+msgid "Язык"
+msgstr ""
+
+#: app/routers/menu/keyboard/settings_utils_menu.py:52
+msgid "Настройки"
+msgstr ""
+
+#: app/routers/user/pair_router.py:24 app/routers/user/pair_router.py:49
+#: app/routers/user/pair_router.py:68
+msgid "Пользователь не найден."
+msgstr ""
+
+#: app/routers/user/pair_router.py:27
+msgid "У вас уже есть партнер!"
+msgstr ""
+
+#: app/routers/user/pair_router.py:31
+msgid ""
+"Вот ваш созданный ранее запрос{link}.\n"
+"Запрос действует в течении часа"
+msgstr ""
+
+#: app/routers/user/pair_router.py:36
+msgid ""
+"Запрос на пару создан: {request}\n"
+"Запрос действует в течении часа"
+msgstr ""
+
+#: app/routers/user/pair_router.py:54 app/routers/user/user_router.py:23
+#: app/routers/wish/active_wish_router.py:66
+msgid "У вас еще нет партнера!"
+msgstr ""
+
+#: app/routers/user/pair_router.py:56
+msgid "Ваш партнер: {partner}"
+msgstr ""
+
+#: app/routers/user/pair_router.py:73
+msgid "У вас еще нет пары!"
+msgstr ""
+
+#: app/routers/user/pair_router.py:77
+msgid "Вы больше не являетесь партнерами!"
+msgstr ""
+
+#: app/routers/user/user_router.py:19
+msgid "Ваш партнер:{partner}"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:48
+#: app/routers/wish/active_wish_router.py:78
+#: app/routers/wish/active_wish_router.py:136
+#: app/routers/wish/active_wish_router.py:173
+msgid "Пользователь не найден"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:59
+msgid "У партнера пока нет желаний!"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:83
+#: app/routers/wish/active_wish_router.py:141
+msgid "У вас еще нет активного желания"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:99
+msgid "Время на исполнение желания: {title} истекло"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:102
+msgid ""
+"Ваше желание: {title}\n"
+"Срок на выполнение: {expired_at}\n"
+"Осталось {days} дней {hours} часов {minutes} минут до истечения срока.\n"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:150
+msgid "Подтвердить"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:151
+msgid "Отклонить"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:156
+msgid "Пожалуйста, подтвердите выполнение желания: {title}\n"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:157
+msgid "Выполнил: {username}."
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:180
+msgid "Запрос уже был выполнен"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:182
+msgid "Вы подтвердили действие."
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:186
+msgid "Вы отклонили действие."
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:208
+msgid "Спасибо большое, что выполнил мое желание"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:209
+msgid "с любовью от партнера {username}.\n"
+msgstr ""
+
+#: app/routers/wish/active_wish_router.py:214
+msgid "Функция сейчас не доступна"
+msgstr ""
+
+#: app/routers/wish/history_router.py:56
+msgid "Prev"
+msgstr ""
+
+#: app/routers/wish/history_router.py:59
+msgid "Next"
+msgstr ""
+
+#: app/routers/wish/history_router.py:90
+msgid "№ | Имя | Пользователь | Выполнено? | Дата завершения"
+msgstr ""
+
+#: app/routers/wish/history_router.py:93 app/routers/wish/history_router.py:103
+msgid "{}. | {} | {} | {} | {}"
+msgstr ""
+
+#: app/routers/wish/history_router.py:97 app/routers/wish/history_router.py:107
+#: app/routers/wish/wish_router.py:85 app/routers/wish/wish_router.py:144
+msgid "Да"
+msgstr ""
+
+#: app/routers/wish/history_router.py:97 app/routers/wish/history_router.py:107
+#: app/routers/wish/wish_router.py:86 app/routers/wish/wish_router.py:155
+msgid "Нет"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:68
+msgid "У вас еще нет пожеланий!"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:71
+msgid ""
+"Ваши пожелания, в количестве {wishes}:\n"
+"{titles_str}"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:104
+msgid "Привет, давай добавим твое желание! Напиши его"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:108
+msgid "Вы достигли лимита пожеланий!"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:121 app/routers/wish/wish_router.py:146
+msgid "Текст должен быть не более 128 символов!"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:128
+msgid ""
+"Прекрасно желание добавлено, {text}!\n"
+"Хочешь добавить еще?"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:151
+msgid "Желание '{potential_wish}' добавлено. Хочешь добавить еще одно?"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:194
+msgid "У вас еще нет пожеланий для редактирования!"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:199
+msgid ""
+"Выберите номер желания, которое хотите отредактировать:\n"
+"{titles_str}"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:220
+msgid "Прекращено."
+msgstr ""
+
+#: app/routers/wish/wish_router.py:224
+msgid ""
+"Пожалуйста, введите корректный номер желания.\n"
+"/b - отмена"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:232
+msgid "Введите новый текст для вашего желания:"
+msgstr ""
+
+#: app/routers/wish/wish_router.py:248
+msgid "Ваше желание было успешно обновлено!"
+msgstr ""
+
+#: app/text/menu/faq.py:5
+msgid ""
+"FAQ (Часто задаваемые вопросы) 📋\n"
+"\n"
+"Добро пожаловать в Wishlist! 💖✨\n"
+"\n"
+"Мы рады, что вы здесь! Ниже вы найдете ответы на самые частые вопросы, "
+"которые помогут вам быстро освоиться и начать получать удовольствие от "
+"использования нашего приложения.\n"
+"\n"
+"Общие вопросы\n"
+"\n"
+"1. Все ли данные конфиденциальны? 🔒\n"
+"Да, все ваши данные строго конфиденциальны и зашифрованы. Мы не передаем "
+"ваши данные третьим лицам. Ваши желания видны только вам и вашему "
+"партнеру.\n"
+"\n"
+"Желания и их выполнение\n"
+"\n"
+"2. Как добавить желание? 🌠\n"
+"Перейдите в раздел “Желания” и нажмите “Добавить желание”. Введите текст "
+"желания и сохраните его. Ваш партнер увидит его в своем списке.\n"
+"\n"
+"3. Как узнать, какое желание выполнять? 🎲\n"
+"Нажмите “Начать игру”, и одно из желаний вашего партнера будет выбрано "
+"случайным образом. У вас будет определенное время для его выполнения.\n"
+"\n"
+"4. Видит ли партнер, какое желание я выполняю? 👀\n"
+"Нет, ваш партнер не видит, какое именно желание вы выполняете, и не "
+"знает, что вы вообще выполняете какое-то желание, пока вы не уведомите "
+"его об этом.\n"
+"\n"
+msgstr ""
+
+#: app/text/menu/faq.py:31
+msgid ""
+"\n"
+"Пары и взаимодействие\n"
+"\n"
+"5. Как создать пару? 💞\n"
+"Перейдите в раздел “Пара” и нажмите “Создать запрос на пару”. Поделитесь "
+"ссылкой со своим партнером, чтобы они могли присоединиться.\n"
+"\n"
+"6. Как посмотреть текущего партнера? 👩‍❤️‍👨\n"
+"Перейдите в раздел “Пара” и нажмите “Посмотреть текущего партнера”.\n"
+"\n"
+"7. Как отклонить текущего партнера? 🚫\n"
+"Перейдите в раздел “Пара” и нажмите “Отклонить текущего партнера”.\n"
+"\n"
+"Подписка и Режим 18+\n"
+"\n"
+"8. Что такое режим 18+? 🔞\n"
+"Режим 18+ — это эксклюзивный контент для подписчиков, включающий желания "
+"с элементами сексуальной близости. Это поможет добавить страсти и новых "
+"ощущений в ваши отношения.\n"
+"\n"
+"9. Как активировать подписку? 💳\n"
+"Перейдите в раздел “Режим 18+” и нажмите “Активировать подписку”. "
+"Следуйте инструкциям для завершения активации.\n"
+"\n"
+"    "
+msgstr ""
+
+#: app/text/menu/rules.py:5
+msgid ""
+"\n"
+"Привет! 👋 \n"
+"Как пользоваться ботом Wishlist\n"
+"\n"
+"Регистрация и подключение:\n"
+"Начните с регистрации в нашем боте. После этого поделитесь уникальной "
+"ссылкой со своим партнером, чтобы создать пару. 🔗\n"
+"\n"
+"Создание списка желаний:\n"
+"Вместе с партнером добавьте до 10 желаний в список. 📝 Эти желания могут "
+"быть романтическими сюрпризами или маленькими повседневными просьбами.\n"
+"\n"
+"Начало игры:\n"
+"Когда будете готовы, нажмите кнопку \"Играем\". 🎲 Бот случайным образом "
+"выберет одно из желаний вышего партнера.\n"
+"\n"
+"Выполнение желаний:\n"
+"Выполните желание в указанный срок. ⏰ После выполнения нажмите \"Я "
+"выполнил\", и партнер получит уведомление для подтверждения. 🎉\n"
+"\n"
+"Делайте сюрпризы и радуйте друг друга! 💖✨\n"
+"    "
+msgstr ""
+
+#: app/utils/job_scheduler/jobs.py:28
+msgid ""
+"Ваше желание {title} не выполнено,\n"
+" партнером: {executor}."
+msgstr ""
+
+#: app/utils/job_scheduler/jobs.py:36
+msgid "Желание {title} партнера {partner} вы не выполнили"
+msgstr ""
+
+#~ msgid "Запрос на пару создан: {request}"
+#~ msgstr ""
+
+#~ msgid "Сосать бояться"
+#~ msgstr ""
+
