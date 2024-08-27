@@ -57,7 +57,7 @@ LOCALES_DIR = f'{DIR}/locales'  # Директория для locales
 
 # Настройки времени жизни запросов и лимитов
 
-MEDIA_DIR = DIR / 'all_media'  # Директория для хранения медиафайлов
+MEDIA_DIR = DIR / 'templates/image'  # Директория для хранения медиафайлов
 
 LOGS_DIR = DIR / 'logs'  # Директория для хранения логов
 
