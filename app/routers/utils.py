@@ -11,11 +11,11 @@ from app.dao.wish.wish_dao import WishDao
 
 
 async def edit_callback_message(callback: types.CallbackQuery, caption: str, img_path: str,
-                                reply_markup: types.InlineKeyboardMarkup) -> None:
+                                reply_markup: types.InlineKeyboardMarkup or None) -> None:
     """
     Редактирует медиа и клавиатуру сообщения по callback.
 
-    Аргументы:
+    Args:
         callback (types.CallbackQuery): Callback-запрос для ответа.
         caption (str): Заголовок для нового медиа.
         img_path (str): Относительный путь к файлу изображения.

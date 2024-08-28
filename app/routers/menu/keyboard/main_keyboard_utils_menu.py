@@ -18,14 +18,14 @@ def get_main_keyboard(active_wish=False):
     buttons = [
         start_button,
         [
-            KeyboardButton(text="🌠 Желания"),
-            KeyboardButton(text="📜 История"),
-            KeyboardButton(text="💑 Пара")
+            KeyboardButton(text=_("🌠 Желания")),
+            KeyboardButton(text=_("📜 История")),
+            KeyboardButton(text=_("💑 Пара"))
         ],
-        [KeyboardButton(text="🔞 Режим 18+")],
+        [KeyboardButton(text=_("🔞 Режим 18+"))],
         [
             KeyboardButton(text=_("❓Помощь")),
-            KeyboardButton(text="⚙️Настройки")
+            KeyboardButton(text=_("⚙️Профиль"))
         ],
     ]
 

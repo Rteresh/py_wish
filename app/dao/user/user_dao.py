@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta, datetime
 
-from sqlalchemy import insert, update, select
+from sqlalchemy import insert, update
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.dao.base.base_dao import BaseDao
@@ -108,6 +108,31 @@ class UserDao(BaseDao):
 
             except Exception as e:
                 logger.error(f"An unexpected error occurred in update_premium: {e}")
+                raise
+
+            finally:
+                await session.close()
+
+    @classmethod
+    async def update_test_premium(cls, user: User, is_premium: bool):
+        """
+        Метод обновляет статус тестовой премиум-подписки пользователя.
+        :param user: Модель пользователя
+        :param is_premium: Логическое значение, указывающее на наличие тестовой премиум-подписки.
+        """
+        async with async_session_maker() as session:
+            try:
+                query = update(User).where(User.id == user.id).values(
+                    test_premium=is_premium
+                )
+                await session.execute(query)
+                await session.commit()
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in update_test_premium: {e}")
+
+            except Exception as e:
+                logger.error(f"An unexpected error occurred in update_test_premium: {e}")
                 raise
 
             finally:

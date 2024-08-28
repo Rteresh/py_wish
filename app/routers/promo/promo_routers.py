@@ -43,7 +43,7 @@ async def _enter_promo_code(user: User, text: str) -> str:
             is_premium=True,
             time=promo.premium_duration)
         await PromoDao.set_finished(promo)
-        return _('Промокод активирован! Длительность премиум аккаунта: {duration} месяцев.').format(
+        return _('Промокод активирован! Длительность премиум аккаунта увеличено на: {duration} месяцев.').format(
             duration=promo.premium_duration
         )
     return _('Промокод не найден или недействителен!')

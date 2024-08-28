@@ -20,6 +20,8 @@ class User(Base):
         created_at (datetime): Время создания пользователя. По умолчанию текущее время.
         is_matched (bool): Флаг, указывающий, совпадает ли пользователь с другим пользователем. По умолчанию False.
         is_premium (bool): Флаг, указывающий, является ли пользователь премиум-пользователем. По умолчанию False.
+        is_admin (bool): Флаг, указывающий, является ли пользователь администратором. По умолчанию False.
+        test_promo (bool): Флаг, указывающий, имеет ли доступ к тест подписке. По умолчанию True.
         wishes (relationship): Отношение "один ко многим" с моделью Wish. Каскадное удаление.
         pair_requests (relationship): Отношение "один ко многим" с моделью PairRequest. Каскадное удаление.
     """
@@ -35,7 +37,9 @@ class User(Base):
     is_matched = Column(Boolean, default=False)
     is_premium = Column(Boolean, default=False)
     time_premium = Column(DateTime, nullable=True)
-    test = Column(DateTime, nullable=True)
+    is_admin = Column(Boolean, default=False)
+
+    test_premium = Column(Boolean, default=True)
 
     wishes = relationship("Wish", back_populates="user", cascade="all, delete")
     pair_requests = relationship("PairRequest", back_populates="user", cascade="all, delete")
@@ -47,7 +51,6 @@ class User(Base):
         Возвращает True, если пользователь является премиум-пользователем и срок его премиум-статуса не истек.
         """
         return self.is_premium and self.time_premium > datetime.utcnow()
-
 
 
 class Pair(Base):

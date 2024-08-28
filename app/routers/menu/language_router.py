@@ -76,7 +76,9 @@ async def callbacks_language(callback: types.CallbackQuery, state: FSMContext):
                                     img_path='image3.jpg',
                                     reply_markup=_get_language_keyboard())
 
-        await i18n_middleware.set_locale(state=state, locale='en')
+        await callback.message.edit_reply_markup(reply_markup=None)
+
+        await i18n_middleware.set_locale(state=state, locale='ru')
 
     if action == "en":
         await edit_callback_message(callback,
@@ -84,9 +86,10 @@ async def callbacks_language(callback: types.CallbackQuery, state: FSMContext):
                                     img_path='image3.jpg',
                                     reply_markup=_get_language_keyboard())
 
+        await callback.message.edit_reply_markup(reply_markup=None)
+
         await i18n_middleware.set_locale(state=state, locale='en')
 
-    await callback.answer()
     current_state = await state.get_state()
     if current_state == MenuStateForm.choosing_type.state:
         await help_faq(callback.message, state)

@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     COUNT_WISH_PREMIUM: int
     TIME_LIFE: int
     MAX_WISH_LENGTH: int
+    TEST_PERIOD_PREMIUM: int
+    TIME_PREMIUM: int
 
 
     @property

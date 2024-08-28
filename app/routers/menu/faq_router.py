@@ -51,6 +51,7 @@ def get_keyboard(show_rules=True, show_faq=True, show_settings=True, b_next=Fals
     return keyboard
 
 
+# TODO УБРАТЬ
 @menu_router.callback_query(F.data.startswith("h_"))
 async def callbacks_num(callback: types.CallbackQuery, state: FSMContext):
     action = callback.data.split("_")[1]
@@ -76,7 +77,6 @@ async def callbacks_num(callback: types.CallbackQuery, state: FSMContext):
                                     img_path='image1.jpg',
                                     reply_markup=get_keyboard(show_faq=False, b_next=True))
     elif action == "menu":
-        # TODO: не работает кнопка после второго нажатия
         await main_menu(callback.message)
     await state.clear()
 
