@@ -1,5 +1,4 @@
 from aiogram import Router
-from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardRemove
@@ -44,13 +43,12 @@ async def _enter_promo_code(user: User, text: str) -> str:
             is_premium=True,
             time=promo.premium_duration)
         await PromoDao.set_finished(promo)
-        return _('Прмокод активирован! Длительность премиум аккаунта: {duration} месяцев.').format(
+        return _('Промокод активирован! Длительность премиум аккаунта: {duration} месяцев.').format(
             duration=promo.premium_duration
         )
     return _('Промокод не найден или недействителен!')
 
 
-@promo_router.message(Command('promo'))
 async def enter_promo_code(message: Message, state: FSMContext) -> None:
     """
     Обработчик команды /promo. Начинает процесс ввода промокода.
@@ -75,4 +73,4 @@ async def process_promo_code(message: Message, state: FSMContext) -> None:
     await state.set_state(PromoStates.promo_code_accepted)
     user = await UserDao.find_by_id(message.from_user.id)
     await message.answer(text=await _enter_promo_code(user, message.text))
-
+    await state.clear()
