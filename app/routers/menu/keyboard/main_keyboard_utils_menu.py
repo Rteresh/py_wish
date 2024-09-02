@@ -2,6 +2,8 @@ from aiogram import Router, F, types
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
+
 
 from app.dao.user.user_dao import UserDao
 from app.dao.wish.active_wish_dao import ActiveDao
@@ -13,7 +15,7 @@ def get_main_keyboard(active_wish=False):
     if active_wish:
         start_button = [KeyboardButton(text=_("🎯 Активное желание"))]
     else:
-        start_button = [KeyboardButton(text="🎲 Начать игру")]
+        start_button = [KeyboardButton(text=_("🎲 Начать игру"))]
 
     buttons = [
         start_button,
@@ -38,7 +40,7 @@ def get_main_keyboard(active_wish=False):
     return keyboard
 
 
-@main_keyboard.message(F.text.contains("Назад в меню"))
+@main_keyboard.message(F.text == __("Назад в меню"))
 async def step_back_utils(message: types.Message):
     await message.answer("Главное меню", reply_markup=get_main_keyboard(await _flag(message)))
 
@@ -62,7 +64,7 @@ async def _flag(message: types.Message) -> bool:
     return await ActiveDao.check_active_wish(user)
 
 
-@main_keyboard.message(F.text.contains('Режим 18+'))
+@main_keyboard.message(F.text == __('🔞 Режим 18+'))
 async def premium_main(message: types.Message):
     await message.answer("Пока недоступно/скоро...", reply_markup=get_main_keyboard(await _flag(message)))
 

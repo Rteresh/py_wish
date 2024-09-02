@@ -1,5 +1,4 @@
 from aiogram import Router, F, types
-from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.i18n import gettext as _
@@ -11,7 +10,6 @@ from app.dao.wish.history_dao import HistoryDao
 history_router = Router()
 
 
-@history_router.message(Command('get_history_owner'))
 async def get_wish_history_owner(message: Message, page: int = 1):
     """
     Обработчик команды для получения истории желаний владельца.
@@ -25,7 +23,6 @@ async def get_wish_history_owner(message: Message, page: int = 1):
     await _paginate(message, page, HistoryDao.get_all_wish_history_by_owner, user, command='owner')
 
 
-@history_router.message(Command('get_history_executor'))
 async def get_wish_history_executor(message: Message, page: int = 1):
     """
     Обработчик команды для получения истории желаний исполнителя.
@@ -76,7 +73,7 @@ async def _paginate(message: Message, page: int, get_history_func, user, command
     """
     history = await get_history_func(user)
     if not history:
-        await message.answer('Ваши желания не выполнили или нету желаний которых вы выполнили')
+        await message.answer_(('Ваши желания не выполнили или нету желаний которых вы выполнили'))
         return
 
     items_per_page = 10

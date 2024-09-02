@@ -170,16 +170,15 @@ async def handle_next_wish_decision(callback: types.CallbackQuery, state: FSMCon
         user = await UserDao.find_by_id(callback.from_user.id)
         if await check_wish_limit(user):
             await state.set_state(AddWish.name)
-            await callback.message.edit_text("Какое еще желание ты хотел бы добавить?")
+            await callback.message.edit_text(_("Какое еще желание ты хотел бы добавить?"))
         else:
-            await callback.message.edit_text("Вы достигли лимита пожеланий!")
+            await callback.message.edit_text(_("Вы достигли лимита пожеланий!"))
             await state.clear()
     elif action == "no":
         await state.clear()
-        await callback.message.edit_text("Возвращаемся в меню.")
+        await callback.message.edit_text(_("Возвращаемся в меню."))
 
 
-@wish_router.message(Command('edit_wish'))
 async def edit_wishes(message: Message, state: FSMContext):
     """
     Начинает процесс редактирования желания.
@@ -249,7 +248,7 @@ async def process_edit_text(message: Message, state: FSMContext):
 
 
 # TODO: DELETE
-@wish_router.message(Command('create'))
+@wish_router.message(Command('create_wish_10'))
 async def create_10_wish(message: Message):
     """
     Создает 10 пожеланий для примера.

@@ -66,6 +66,7 @@ async def update_premium(message: Message):
         await _update_premium_test_period(message, user)
     else:
         await message.answer(_('Скоро будет платная подписка'))
+        # ЗАГЛУШКА ДЛЯ ПОСЛЕДУБЩЕЙ РЕАЛИЗАЦИИ ПОДПИСКИ
 
 
 async def get_premium_status(message: Message):
