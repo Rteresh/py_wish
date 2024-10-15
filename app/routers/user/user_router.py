@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from aiogram import Router
+from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.utils.i18n import gettext as _
 
@@ -115,6 +116,12 @@ async def _get_time_until_expiration(time_premium: datetime) -> tuple[int, int, 
     minutes, _ = divmod(remainder, 60)
     return days, hours, minutes
 
+
+@user_router.message(Command('admin_users'))
+async def get_all_users(message: Message):
+    if message.from_user.id == 477542023 or 7188509368:
+        user_list = await UserDao.data_all()
+        await message.answer(str(len(user_list)))
 # @user_router.message(Command('lag1'))
 # async def lag1(message: Message):
 #     await message.answer(f'Ваш язык {await UserDao.get_language(message.from_user.id)}')

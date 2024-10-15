@@ -27,7 +27,7 @@ def _get_pair_keyboard():
 
 @pair_keyboard.message(F.text == __("💑 Пара"))
 async def start_game(message: types.Message):
-    await message.reply("Пункт пар", reply_markup=_get_pair_keyboard())
+    await message.reply(_("Пункт пар"), reply_markup=_get_pair_keyboard())
 
 
 @pair_keyboard.message(F.text == __("Создать пару"))

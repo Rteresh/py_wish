@@ -3,10 +3,8 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
 
-
 from app.routers.menu.keyboard.main_keyboard_utils_menu import update_main_keyboard
-from app.routers.wish.active_wish_router import create_active_wish, send_confirmation_request, get_active_time, \
-    change_active_wish
+from app.routers.wish.active_wish_router import create_active_wish, send_confirmation_request, get_active_time
 
 start_keyboard = Router()
 
@@ -24,9 +22,9 @@ async def active_wish_handler(message: types.Message):
 
 def _get_active_keyboard():
     buttons = [
-        [KeyboardButton(text=_("Сообщить о выполнении желания"))],
-        [KeyboardButton(text=_("Мое активное желание")),
-         KeyboardButton(text=_("Сменить активное желание"))],
+        [KeyboardButton(text=_("Сообщить о выполнении желания")),
+         KeyboardButton(text=_("Мое активное желание"))],
+        # KeyboardButton(text=_("Сменить активное желание"))],
         [KeyboardButton(text=_("Назад в меню"))]
     ]
     keyboard = ReplyKeyboardMarkup(
@@ -47,7 +45,6 @@ async def add_wish_handler(message: types.Message):
 async def add_wish_handler(message: types.Message):
     await get_active_time(message)
 
-
-@start_keyboard.message(F.text == __("Сообщить о выполнении желания"))
-async def add_wish_handler(message: types.Message):
-    await change_active_wish(message)
+# @start_keyboard.message(F.text == __("Сменить активное желание"))
+# async def add_wish_handler(message: types.Message):
+#     await change_active_wish(message)

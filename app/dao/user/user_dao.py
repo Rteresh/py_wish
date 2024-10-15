@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta, datetime
 
-from sqlalchemy import insert, update
+from sqlalchemy import insert, update, select, and_
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.dao.base.base_dao import BaseDao
@@ -214,3 +214,30 @@ class UserDao(BaseDao):
             return None
         return user.time_premium
 
+    @classmethod
+    async def get_finished_premium_users(cls) -> list:
+        """
+        Метод возвращает список пользователей, у которых закончилась премиум-подписка.
+
+        Returns:
+            list: Список пользователей, у которых закончилась премиум-подписка.
+        """
+        async with async_session_maker() as session:
+            try:
+                query = select(cls.model).where(
+                    and_(cls.model.time_premium < datetime.utcnow(), cls.model.is_premium == True)
+                )
+                result = await session.execute(query)
+                users = result.scalars().all()
+                return users
+
+            except SQLAlchemyError as e:
+                logger.error(f"Database error occurred in get_finished_premium_users: {e}")
+                raise
+
+            except Exception as e:
+                logger.error(f"An unexpected error occurred in get_finished_premium_users: {e}")
+                raise
+
+            finally:
+                await session.close()

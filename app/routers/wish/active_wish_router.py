@@ -157,7 +157,7 @@ async def send_confirmation_request(message: Message) -> None:
         _("Выполнил: {username}.").format(username=user.username),
         reply_markup=keyboard
     )
-    await message.answer('Запрос на подтверждение отправлен вашему партнеру!')
+    await message.answer(_('Запрос на подтверждение отправлен вашему партнеру!'))
 
 
 @active_router.callback_query(lambda c: c.data in ['confirm', 'reject'])

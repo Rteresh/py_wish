@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile
-from aiogram.utils.i18n import I18n, FSMI18nMiddleware
+from aiogram.utils.i18n import I18n, ConstI18nMiddleware, FSMI18nMiddleware  # noqa
 
 from app.config import DIR
 from app.config import MEDIA_DIR
@@ -16,7 +16,10 @@ user_data = {}
 
 i18n = I18n(path=DIR / 'locales', default_locale='ru', domain='messages')
 
-i18n_middleware = FSMI18nMiddleware(i18n=i18n)
+# i18n_middleware = FSMI18nMiddleware(i18n=i18n)
+
+
+i18n_middleware = ConstI18nMiddleware(i18n=i18n, locale='ru')
 
 
 @language_router.message(MenuStateForm.choosing_language)
@@ -78,7 +81,8 @@ async def callbacks_language(callback: types.CallbackQuery, state: FSMContext):
 
         await callback.message.edit_reply_markup(reply_markup=None)
 
-        await i18n_middleware.set_locale(state=state, locale='ru')
+        # await i18n_middleware.set_locale(state=state, locale='ru')
+        # print('СМЕНИЛИ ЯЗЫК')
 
     if action == "en":
         await edit_callback_message(callback,
@@ -88,7 +92,7 @@ async def callbacks_language(callback: types.CallbackQuery, state: FSMContext):
 
         await callback.message.edit_reply_markup(reply_markup=None)
 
-        await i18n_middleware.set_locale(state=state, locale='en')
+        # await i18n_middleware.set_locale(state=state, locale='en')
 
     current_state = await state.get_state()
     if current_state == MenuStateForm.choosing_type.state:

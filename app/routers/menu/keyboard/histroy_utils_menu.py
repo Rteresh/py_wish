@@ -25,12 +25,12 @@ def _get_wish_keyboard():
     return keyboard
 
 
-@history_keyboard.message(F.text == __("История"))
+@history_keyboard.message(F.text == __("📜 История"))
 async def history_handler(message: types.Message):
     await message.reply(_("Пункт истории"), reply_markup=_get_wish_keyboard())
 
 
-@history_keyboard.message(F.text == _("Мои желаний"))
+@history_keyboard.message(F.text == __("Мои желаний"))
 async def get_owner_history_handler(message: types.Message):
     await get_wish_history_owner(message)
 

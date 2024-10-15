@@ -27,7 +27,7 @@ def _get_wish_keyboard():
 
 @wish_keyboard.message(F.text == __("🌠 Желания"))
 async def wish_handler(message: types.Message):
-    await message.answer("Пункт желания", reply_markup=_get_wish_keyboard())
+    await message.answer(_("🌠 Пункт желаний"), reply_markup=_get_wish_keyboard())
 
 
 @wish_keyboard.message(F.text == __("Мои желания"))

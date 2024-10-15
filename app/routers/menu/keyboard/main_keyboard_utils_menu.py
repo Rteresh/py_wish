@@ -4,7 +4,6 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
 
-
 from app.dao.user.user_dao import UserDao
 from app.dao.wish.active_wish_dao import ActiveDao
 
@@ -42,12 +41,12 @@ def get_main_keyboard(active_wish=False):
 
 @main_keyboard.message(F.text == __("Назад в меню"))
 async def step_back_utils(message: types.Message):
-    await message.answer("Главное меню", reply_markup=get_main_keyboard(await _flag(message)))
+    await message.answer(_("Главное меню"), reply_markup=get_main_keyboard(await _flag(message)))
 
 
 @main_keyboard.message(Command("menu"))
 async def main_menu(message: types.Message):
-    await message.answer("Главное меню", reply_markup=get_main_keyboard(await _flag(message)))
+    await message.answer(_("Главное меню"), reply_markup=get_main_keyboard(await _flag(message)))
 
 
 @main_keyboard.callback_query(F.data.startswith("menu_back"))
@@ -66,7 +65,7 @@ async def _flag(message: types.Message) -> bool:
 
 @main_keyboard.message(F.text == __('🔞 Режим 18+'))
 async def premium_main(message: types.Message):
-    await message.answer("Пока недоступно/скоро...", reply_markup=get_main_keyboard(await _flag(message)))
+    await message.answer(_("Пока недоступно/скоро..."), reply_markup=get_main_keyboard(await _flag(message)))
 
 # inline menu back
 

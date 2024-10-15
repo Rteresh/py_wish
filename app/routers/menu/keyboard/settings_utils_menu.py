@@ -27,7 +27,7 @@ def _get_settings_keyboard():
     ]
     keyboard = ReplyKeyboardMarkup(
         keyboard=buttons,
-        one_time_keyboard=False,  # Этот параметр означает, что клавиатура будет показана только один раз
+        one_time_keyboard=True,  # Этот параметр означает, что клавиатура будет показана только один раз
         resize_keyboard=True,
         input_field_placeholder=_("Выберите пункт меню")  # Это текст, который будет показан в поле ввода вверху экран
     )
@@ -81,7 +81,7 @@ async def update_premium_menu(message: types.Message):
 
 
 @settings_keyboard.message(F.text == __("Статус подписки"))
-async def update_premium_menu(message: types.Message):
+async def status_premium_menu(message: types.Message):
     """
     Обрабатывает команду открытия промокода из меню.
 
